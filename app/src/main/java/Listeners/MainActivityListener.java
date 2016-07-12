@@ -2,7 +2,10 @@ package Listeners;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -24,10 +27,14 @@ public class MainActivityListener implements View.OnClickListener {
     private Activity currentActivity;
     private TextView mainActivityText;
     private String [] genderList = new String[] {"None Selected", "Male", "Female"};
+    private SharedPreferences activityPreferences;
+    private SharedPreferences.Editor editor;
 
     public MainActivityListener(Activity currentActivity) {
         this.currentActivity = currentActivity;
         mainActivityText = (TextView) currentActivity.findViewById(R.id.MainActivityTextView);
+        activityPreferences = this.currentActivity.getSharedPreferences("iBaleka_Search", Context.MODE_PRIVATE);
+        editor = activityPreferences.edit();
     }
 
     @Override
@@ -37,27 +44,32 @@ public class MainActivityListener implements View.OnClickListener {
                processSearch();
                break;
            case R.id.UpdateProfileButton:
-
+                processUpdateProfile();
+               break;
        }
     }
 
     private void processSearch()
     {
         TextView searchParams = (TextView) currentActivity.findViewById(R.id.SearchCriteriaEditText);
-        CheckBox currentLocationCheckBox = (CheckBox) currentActivity.findViewById(R.id.SearchNearEventsCheckBox);
         CheckBox sortByDateCheckBox = (CheckBox) currentActivity.findViewById(R.id.SortByDateCheckBox);
-        CheckBox currentCityCheckBox = (CheckBox) currentActivity.findViewById(R.id.CurrentCityEvents);
-
         String searchParameters = TextSanitizer.sanitizeText(searchParams.getText().toString().trim(), true);
-        boolean searchCurrentLocation = currentLocationCheckBox.isChecked();
         boolean sortByDate = sortByDateCheckBox.isChecked();
-        boolean searchCurrentCity = currentCityCheckBox.isChecked();
 
         if (searchParameters != null || searchParameters.length() != 0){
+
             String searchParam = TextSanitizer.sanitizeText(searchParameters, true);
-            ApplicationBackgroundTask backgroundTask = new ApplicationBackgroundTask(currentActivity);
-            backgroundTask.setExecutionMode(ExecutionMode.EXECUTE_SEARCH);
-            backgroundTask.execute(searchParam, Boolean.toString(searchCurrentLocation), Boolean.toString(sortByDate), Boolean.toString(searchCurrentCity));
+            editor.putString("SearchCriteria", searchParam);
+            editor.putBoolean("SortByDate", sortByDate);
+            editor.commit();
+
+            final TabLayout tabLayout = (TabLayout) currentActivity.findViewById(R.id.SearchTabLayout);
+            currentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tabLayout.getTabAt(1).select();
+                }
+            });
 
         } else {
             displayMessage("Search Parameters Required", "Please enter a valid search criteria");
@@ -87,7 +99,7 @@ public class MainActivityListener implements View.OnClickListener {
         EditText nameEditText = (EditText) currentActivity.findViewById(R.id.EditProfileNameEditText);
         EditText surnameEditText = (EditText) currentActivity.findViewById(R.id.EditProfileSurnameEditText);
         EditText emailEditText = (EditText) currentActivity.findViewById(R.id.EditProfileEmailEditText);
-        EditText passwordEditText = (EditText) currentActivity.findViewById(R.id.PasswordEditText);
+        EditText passwordEditText = (EditText) currentActivity.findViewById(R.id.EditProfilePasswordEditText);
         EditText weightEditText = (EditText) currentActivity.findViewById(R.id.WeightEditText);
         EditText heightEditText = (EditText) currentActivity.findViewById(R.id.HeightEditText);
         EditText licenseNoEditText = (EditText) currentActivity.findViewById(R.id.LicenseNumberEditText);
@@ -118,10 +130,10 @@ public class MainActivityListener implements View.OnClickListener {
 
 
         boolean [] isValid = new boolean[4];
-        isValid[1] = TextSanitizer.isValidText(enteredName, 1, 100);
-        isValid[2] = TextSanitizer.isValidText(enteredSurname, 1, 100);
-        isValid[3] = TextSanitizer.isValidText(enteredEmail, 1, 100);
-        isValid[4] = TextSanitizer.isValidText(enteredPassword, 6, 100);
+        isValid[0] = TextSanitizer.isValidText(enteredName, 1, 100);
+        isValid[1] = TextSanitizer.isValidText(enteredSurname, 1, 100);
+        isValid[2] = TextSanitizer.isValidText(enteredEmail, 1, 100);
+        isValid[3] = TextSanitizer.isValidText(enteredPassword, 3, 100);
 
         if (isValid[0] && isValid[1] && isValid[2] && isValid[3]) {
 

@@ -41,11 +41,6 @@
             android:layout_height="wrap_content"
             android:id = "@+id/SortByDateCheckBox"
             android:text="@string/sort_by_date"/>
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id = "@+id/CurrentCityEvents"
-            android:text="@string/city_events_string"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

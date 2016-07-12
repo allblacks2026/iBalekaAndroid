@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import Listeners.MainActivityListener;
 import allblacks.com.Activities.R;
 
 /**
@@ -17,11 +18,10 @@ import allblacks.com.Activities.R;
  */
 public class StartSearchFragment extends Fragment {
 
-    private CheckBox currentLocationCheckBox;
-    private CheckBox currentCityEventsCheckBox;
     private CheckBox sortResultsCheckBox;
     private EditText searchCriteriaCheckBox;
     private Button searchEventsButton;
+    private MainActivityListener buttonListener;
     public StartSearchFragment() {
 
     }
@@ -36,11 +36,10 @@ public class StartSearchFragment extends Fragment {
 
     private void initializeComponents(View currentView) {
         searchCriteriaCheckBox = (EditText) currentView.findViewById(R.id.SearchCriteriaEditText);
-        currentLocationCheckBox = (CheckBox) currentView.findViewById(R.id
-                .SearchNearEventsCheckBox);
         sortResultsCheckBox = (CheckBox) currentView.findViewById(R.id.SortByDateCheckBox);
-        currentCityEventsCheckBox = (CheckBox) currentView.findViewById(R.id.CurrentCityEvents);
         searchEventsButton = (Button) currentView.findViewById(R.id.SearchEventsButton);
+        buttonListener = new MainActivityListener(getActivity());
+        searchEventsButton.setOnClickListener(buttonListener);
     }
 
 }

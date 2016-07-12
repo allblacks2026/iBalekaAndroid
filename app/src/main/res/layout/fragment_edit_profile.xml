@@ -47,7 +47,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/email_text"
                     android:id = "@+id/EditProfileEmailEditText"
-                    android:inputType="textEmailAddress"/>
+                    android:inputType="textEmailAddress"
+                    />
                 <EditText
                     style="@style/EditTexStyle"
                     android:layout_width="match_parent"

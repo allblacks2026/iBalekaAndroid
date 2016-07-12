@@ -112,18 +112,38 @@ public class UpdateProfileBackgroundTask extends AsyncTask<String, String, Strin
                     String response = "";
                     String line = "";
 
-
                     String updateUrl = baseUrl + "update_athlete_profile.php";
                     URL updateURL = new URL(updateUrl);
+
+                    String name = params[0];
+                    String surname = params[1];
+                    String emailAddress = params[2];
+                    String password = params[3];
+                    String weight = params[4];
+                    String height = params[5];
+                    String licenseNo = params[6];
+                    String gender = params[7];
+
+                    String urlData = URLEncoder.encode("Name", "utf-8")+"="+URLEncoder.encode(name, "utf-8")+"&"+URLEncoder.encode("Surname", "utf-8")+"="+URLEncoder.encode(surname, "utf-8")+"&"+URLEncoder.encode("EmailAddress", "utf-8")+"="+URLEncoder.encode(emailAddress, "utf-8")+"&"+URLEncoder.encode("Password", "utf-8")+"="+URLEncoder.encode(password, "utf-8")+"&"+URLEncoder.encode("Weight", "utf-8")+"="+URLEncoder.encode(weight, "utf-8")+"&"+URLEncoder.encode("Height", "utf-8")+"="+URLEncoder.encode(height, "utf-8")+"&"+URLEncoder.encode("LicenseNo", "utf-8")+"="+URLEncoder.encode(licenseNo, "utf-8")+"&"+URLEncoder.encode("Gender", "utf-8")+"="+URLEncoder.encode(gender, "utf-8");
 
                     HttpURLConnection updateConnection = (HttpURLConnection) updateURL.openConnection();
                     updateConnection.setRequestMethod("POST");
                     updateConnection.setDoInput(true);
                     updateConnection.setDoOutput(true);
+                    OutputStream toServerStream = updateConnection.getOutputStream();
+                    BufferedWriter toServer = new BufferedWriter(new OutputStreamWriter(toServerStream, "utf-8"));
+                    toServer.write(urlData);
+                    toServer.flush();
+                    toServer.close();
+
+                    InputStream fromServerStream = updateConnection.getInputStream();
+                    BufferedReader fromServer = new BufferedReader(new InputStreamReader(fromServerStream, "iso-8859-1"));
+                    while ((line = fromServer.readLine()) != null) {
+                        response = response +line;
+                    }
+                    fromServer.close();
+                    updateConnection.disconnect();
                     return response;
-
-
-
                 } catch (final Exception error) {
                     currentActivity.runOnUiThread(new Runnable() {
                         @Override
@@ -165,16 +185,29 @@ public class UpdateProfileBackgroundTask extends AsyncTask<String, String, Strin
                                 heightEditText.setText(profileObject.getString("Height"));
                             }
                             if (profileObject.getString("Gender").equalsIgnoreCase("Male")) {
-                                genderSpinner.setSelectedIndex(0);
-                            } else {
                                 genderSpinner.setSelectedIndex(1);
+                            } else {
+                                genderSpinner.setSelectedIndex(0);
                             }
                         }
                     }
                     break;
                 case EXECUTE_UPDATE_ATHLETE_PROFILE:
-
-
+                    if(!s.equalsIgnoreCase(null)) {
+                        switch(s) {
+                            case "Error200":
+                            displayMessage("Error Updating Profile", "Please ensure you have valid data to update");
+                                break;
+                            case "Error500":
+                                displayMessage("Error Executing Update", "An error occurred with updating your profile. Please try again later");                                break;
+                            case "Success":
+                                displayMessage("Update Successful", "We have successfully updated your profile details!");
+                                break;
+                                default:
+                                    displayMessage("Unknown Error", s);
+                                    break;
+                        }
+                    }
                     break;
             }
         } catch (Exception error) {

@@ -18,6 +18,7 @@ import java.util.List;
 
 import AppConstants.ExecutionMode;
 import BackgroundTasks.UpdateProfileBackgroundTask;
+import Listeners.MainActivityListener;
 import allblacks.com.Activities.R;
 
 /**
@@ -37,6 +38,7 @@ public class EditProfileFragment extends Fragment {
     private List<String> genders = new ArrayList<String>();
     private UpdateProfileBackgroundTask updateProfileBackgroundTask;
     private SharedPreferences appSharedPreferences;
+    private MainActivityListener buttonListener;
 
     public EditProfileFragment() {
         // Required empty public constructor
@@ -64,13 +66,16 @@ public class EditProfileFragment extends Fragment {
         nameEditText = (EditText) currentView.findViewById(R.id.EditProfileNameEditText);
         surnameEditText = (EditText) currentView.findViewById(R.id.EditProfileSurnameEditText);
         emailEditText = (EditText) currentView.findViewById(R.id.EditProfileEmailEditText);
+        emailEditText.setKeyListener(null);
         passwordEditText = (EditText) currentView.findViewById(R.id.EditProfilePasswordEditText);
         weightEditText = (EditText) currentView.findViewById(R.id.WeightEditText);
         heightEditText = (EditText) currentView.findViewById(R.id.HeightEditText);
         licenseNoEditText = (EditText) currentView.findViewById(R.id.LicenseNumberEditText);
         genderSpinner = (MaterialSpinner) currentView.findViewById(R.id.GenderSpinner);
         genderSpinner.setItems(genders);
+        buttonListener = new MainActivityListener(getActivity());
         updateButton = (Button) currentView.findViewById(R.id.UpdateProfileButton);
+        updateButton.setOnClickListener(buttonListener);
     }
 
 }
