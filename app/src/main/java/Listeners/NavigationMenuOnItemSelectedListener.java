@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import Fragments.AthleteLandingFragment;
 import Fragments.ProfileFragment;
-import Fragments.SearchFragment;
 import Fragments.StartRunFragment;
-import allblacks.com.Activities.R;
+import Fragments.StartSearchFragment;
+import allblacks.com.iBaleka.R;
 
 /**
  * Created by Okuhle on 3/28/2016.
@@ -76,12 +76,12 @@ public class NavigationMenuOnItemSelectedListener implements NavigationView.OnNa
             case R.id.searchEvents:
                 navigationView.getMenu().clear();
                 navigationView.inflateMenu(R.menu.athlete_navigation_menu);
-                SearchFragment searchFragment = new SearchFragment();
+                StartSearchFragment searchFragment = new StartSearchFragment();
                 FragmentTransaction searchFragmentTransaction = mgr.beginTransaction();
                 searchFragmentTransaction.replace(R.id.MainActivityContentArea, searchFragment,
                         "SearchFragment");
                 searchFragmentTransaction.addToBackStack("SearchFragment");
-                toolbarTextView.setText("Search Events");
+                toolbarTextView.setText("Search For Events");
                 drawerLayout.closeDrawers();
                 searchFragmentTransaction.commit();
                 break;
