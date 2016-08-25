@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
@@ -20,11 +21,13 @@ public class CreateAccountStepOneFragment extends Fragment {
 
     private EditText nameEditText, surnameEditText, emailEditText;
     private Spinner athleteTypeSpinner;
-    private MaterialSpinner selectedCountrySpinner;
+    private MaterialSpinner selectedCountrySpinner, genderSpinner;
     private ArrayAdapter spinnerAdapter;
     private Button nextStepButton;
     private RegistrationButtonListener buttonListener;
     private Button dateOfBirthButton;
+    private TextView toolbarTextView;
+    private String [] genderArray = new String[] {"Male", "Female"};
 
     public CreateAccountStepOneFragment() {
     }
@@ -38,8 +41,12 @@ public class CreateAccountStepOneFragment extends Fragment {
     }
 
     private void initializeComponents(View myView) {
+        toolbarTextView = (TextView) getActivity().findViewById(R.id.LoginActivityToolbarTextView);
+        toolbarTextView.setText("Create Account - Step 1 of 2");
         selectedCountrySpinner = (MaterialSpinner) myView.findViewById(R.id.CountrySpinner);
         selectedCountrySpinner.setDropdownMaxHeight(750);
+        genderSpinner = (MaterialSpinner) myView.findViewById(R.id.RegistrationGenderSpinner);
+        genderSpinner.setItems(genderArray);
         String [] countries = this.getResources().getStringArray(R.array.countries_list);
         selectedCountrySpinner.setItems(countries);
 
@@ -62,5 +69,6 @@ public class CreateAccountStepOneFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        toolbarTextView.setText("Create Account - Step 1 of 2");
     }
 }

@@ -1,0 +1,59 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Fragments.ReportExplorerFragment"
+    android:layout_margin="5dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/report_explorer_string"
+        android:textAlignment="center"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_button"
+        android:text="@string/calories_burnt_string"
+        android:textColor="@color/whiteColor"
+        android:layout_marginTop="20dp"
+        android:id = "@+id/ReportExplorerCaloriesBurntButton"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_button"
+        android:text="@string/distance_string"
+        android:textColor="@color/whiteColor"
+        android:layout_marginTop="20dp"
+        android:id = "@+id/ReportExplorerDistanceButton"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_button"
+        android:text="@string/event_personal_string"
+        android:textColor="@color/whiteColor"
+        android:layout_marginTop="20dp"
+        android:id = "@+id/ReportExplorerEventAndPersonalRunButton"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_button"
+        android:text="@string/run_times_string"
+        android:textColor="@color/whiteColor"
+        android:layout_marginTop="20dp"
+        android:id = "@+id/ReportExplorerTimesOverRangeButton"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_button"
+        android:text="@string/club_comparison_string"
+        android:textColor="@color/whiteColor"
+        android:layout_marginTop="20dp"
+        android:id = "@+id/ReportExplorerClubYouButton"/>
+
+</LinearLayout>

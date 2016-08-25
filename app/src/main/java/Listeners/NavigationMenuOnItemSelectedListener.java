@@ -11,8 +11,12 @@ import android.widget.TextView;
 
 import Fragments.AthleteLandingFragment;
 import Fragments.ProfileFragment;
+import Fragments.RegisteredEventsFragment;
+import Fragments.ReportExplorerFragment;
+import Fragments.RunningFragment;
 import Fragments.StartRunFragment;
 import Fragments.StartSearchFragment;
+import Utilities.DeviceHardwareChecker;
 import allblacks.com.iBaleka.R;
 
 /**
@@ -46,7 +50,6 @@ public class NavigationMenuOnItemSelectedListener implements NavigationView.OnNa
                 trans.replace(R.id.MainActivityContentArea, homeFragment, "HomeFragment");
                 trans.addToBackStack("HomeFragment");
                 trans.commit();
-                toolbarTextView.setText("Welcome, User"); //code to get the user falls here
                 drawerLayout.closeDrawers();
                 break;
             case R.id.athleteViewProfile:
@@ -57,19 +60,17 @@ public class NavigationMenuOnItemSelectedListener implements NavigationView.OnNa
                 thirdTrans.replace(R.id.MainActivityContentArea, profileFragment,
                         "ProfileFragment");
                 thirdTrans.addToBackStack("ProfileFragment");
-                toolbarTextView.setText("Athlete Profile Details");
                 drawerLayout.closeDrawers();
                 thirdTrans.commit();
                 break;
             case R.id.athleteStartRun:
                 navigationView.getMenu().clear();
                 navigationView.inflateMenu(R.menu.athlete_navigation_menu);
-                StartRunFragment startRunFragment = new StartRunFragment();
+                RunningFragment startRunFragment = new RunningFragment();
                 FragmentTransaction startRunTransaction = mgr.beginTransaction();
                 startRunTransaction.replace(R.id.MainActivityContentArea, startRunFragment,
-                        "StartRunFragment");
-                startRunTransaction.addToBackStack("StartRunFragment");
-                toolbarTextView.setText("Start a Run");
+                        "RunningFragment");
+                startRunTransaction.addToBackStack("RunningFragment");
                 drawerLayout.closeDrawers();
                 startRunTransaction.commit();
                 break;
@@ -81,10 +82,41 @@ public class NavigationMenuOnItemSelectedListener implements NavigationView.OnNa
                 searchFragmentTransaction.replace(R.id.MainActivityContentArea, searchFragment,
                         "SearchFragment");
                 searchFragmentTransaction.addToBackStack("SearchFragment");
-                toolbarTextView.setText("Search For Events");
                 drawerLayout.closeDrawers();
                 searchFragmentTransaction.commit();
                 break;
+            case R.id.viewRegisteredEvents:
+                DeviceHardwareChecker checker = new DeviceHardwareChecker(currentActivity);
+                checker.checkNetworkConnection();
+                if (checker.isConnectedToInternet()) {
+                    drawerLayout.closeDrawers();
+                    navigationView.getMenu().clear();
+                    navigationView.inflateMenu(R.menu.athlete_navigation_menu);
+                    RegisteredEventsFragment fragment = new RegisteredEventsFragment();
+                    FragmentTransaction repFragment = mgr.beginTransaction();
+                    repFragment.replace(R.id.MainActivityContentArea, fragment, "RegisteredEventsFragment");
+                    repFragment.addToBackStack("RegisteredEvent");
+                    repFragment.commit();
+                } else {
+                    drawerLayout.closeDrawers();
+                }
+                break;
+            case R.id.reportExplorerOption:
+                DeviceHardwareChecker checker1 = new DeviceHardwareChecker(currentActivity);
+                checker1.checkNetworkConnection();
+                if (checker1.isConnectedToInternet()) {
+                    drawerLayout.closeDrawers();
+                    navigationView.getMenu().clear();
+                    navigationView.inflateMenu(R.menu.athlete_navigation_menu);
+                    ReportExplorerFragment reportExplorerFragment = new ReportExplorerFragment();
+                    FragmentTransaction reportTrans = mgr.beginTransaction();
+                    reportTrans.replace(R.id.MainActivityContentArea, reportExplorerFragment, "ReportExplorerFragment");
+                    reportTrans.addToBackStack("ReportExplorerFragment");
+                    reportTrans.commit();
+                } else {
+                    drawerLayout.closeDrawers();
+                }
+
         }
         return true;
     }

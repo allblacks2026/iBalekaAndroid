@@ -1,8 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="Fragments.CreateAccountStepOneFragment">
+             tools:context="Fragments.CreateAccountStepOneFragment"
+                android:orientation="vertical">
         <TextView
             style="@style/TextViewStyle"
             android:layout_width="match_parent"
@@ -35,7 +36,17 @@
             android:id = "@+id/CountrySpinner"
             android:layout_below="@id/EmailEditText"
             android:layout_margin="15dp"
+            android:hint="Select Your Country"
+            android:textAlignment="center"
             ></com.jaredrummler.materialspinner.MaterialSpinner>
+
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id = "@+id/RegistrationGenderSpinner"
+            android:layout_margin="15dp"
+            android:hint="Select Your Gender"
+            android:textAlignment="center"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,16 +73,20 @@
             android:background="@drawable/custom_button"
             android:textColor="@color/whiteColor"
             android:padding="10dp"
-            android:layout_centerHorizontal="true"/>
-        <Button
+            android:layout_gravity="center"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_below="@id/SelectDateOfBirthButton"
-            android:text="@string/next_step_string"
-            android:background="@color/primary"
-            android:textColor="@color/whiteColor"
-            android:padding="10dp"
-            android:layout_marginTop="30dp"
-            android:id = "@+id/NextStepButton"
-            android:layout_centerHorizontal="true"/>
-</RelativeLayout>
+            >
+                <Button
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="@string/next_step_string"
+                    android:background="@color/primary"
+                    android:textColor="@color/whiteColor"
+                    android:layout_marginTop="30dp"
+                    android:layout_alignParentBottom="true"
+                    android:id = "@+id/NextStepButton" />
+        </RelativeLayout>
+
+</LinearLayout>

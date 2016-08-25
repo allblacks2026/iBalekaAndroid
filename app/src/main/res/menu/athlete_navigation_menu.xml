@@ -18,5 +18,17 @@
     <item android:title="Search Events"
         android:icon="@drawable/search"
           android:id = "@+id/searchEvents"/>
+
+        <item android:title= "View Registered Events"
+            android:id = "@+id/viewRegisteredEvents"
+            android:icon="@drawable/ic_event_note"/>
+
+        <item android:title="Search a Club"
+            android:id = "@+id/joinClubOption"
+            android:icon="@drawable/search"/>
+        <item android:title="Report Explorer"
+            android:id = "@+id/reportExplorerOption"
+            android:icon="@drawable/ic_timeline"/>
+
     </group>
 </menu>

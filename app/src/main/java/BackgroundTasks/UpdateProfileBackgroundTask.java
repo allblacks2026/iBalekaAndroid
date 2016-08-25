@@ -130,7 +130,16 @@ public class UpdateProfileBackgroundTask extends AsyncTask<String, String, Strin
                     String securityQuestion = params[8];
                     String securityAnswer = params[9];
 
-                    String urlData = URLEncoder.encode("Name", "utf-8")+"="+URLEncoder.encode(name, "utf-8")+"&"+URLEncoder.encode("Surname", "utf-8")+"="+URLEncoder.encode(surname, "utf-8")+"&"+URLEncoder.encode("EmailAddress", "utf-8")+"="+URLEncoder.encode(emailAddress, "utf-8")+"&"+URLEncoder.encode("Password", "utf-8")+"="+URLEncoder.encode(password, "utf-8")+"&"+URLEncoder.encode("Weight", "utf-8")+"="+URLEncoder.encode(weight, "utf-8")+"&"+URLEncoder.encode("Height", "utf-8")+"="+URLEncoder.encode(height, "utf-8")+"&"+URLEncoder.encode("LicenseNo", "utf-8")+"="+URLEncoder.encode(licenseNo, "utf-8")+"&"+URLEncoder.encode("Gender", "utf-8")+"="+URLEncoder.encode(gender, "utf-8")+"&"+URLEncoder.encode("SecurityQuestion", "utf-8") +"="+URLEncoder.encode(securityQuestion, "utf-8")+"&"+URLEncoder.encode("SecurityAnswer", "utf-8")+"="+URLEncoder.encode(securityAnswer, "utf-8");
+                    String urlData = URLEncoder.encode("Name", "utf-8")+"="+URLEncoder.encode(name, "utf-8")
+                            +"&"+URLEncoder.encode("Surname", "utf-8")+"="+URLEncoder.encode(surname, "utf-8")
+                            +"&"+URLEncoder.encode("EmailAddress", "utf-8")+"="+URLEncoder.encode(emailAddress, "utf-8")
+                            +"&"+URLEncoder.encode("Password", "utf-8")+"="+URLEncoder.encode(password, "utf-8")
+                            +"&"+URLEncoder.encode("Weight", "utf-8")+"="+URLEncoder.encode(weight, "utf-8")
+                            +"&"+URLEncoder.encode("Height", "utf-8")+"="+URLEncoder.encode(height, "utf-8")
+                            +"&"+URLEncoder.encode("LicenseNo", "utf-8")+"="+URLEncoder.encode(licenseNo, "utf-8")
+                            +"&"+URLEncoder.encode("Gender", "utf-8")+"="+URLEncoder.encode(gender, "utf-8")
+                            +"&"+URLEncoder.encode("SecurityQuestion", "utf-8") +"="+URLEncoder.encode(securityQuestion, "utf-8")
+                            +"&"+URLEncoder.encode("SecurityAnswer", "utf-8")+"="+URLEncoder.encode(securityAnswer, "utf-8");
 
                     HttpURLConnection updateConnection = (HttpURLConnection) updateURL.openConnection();
                     updateConnection.setRequestMethod("POST");
@@ -181,26 +190,36 @@ public class UpdateProfileBackgroundTask extends AsyncTask<String, String, Strin
                         } else {
 
                             JSONObject profileObject = new JSONObject(s);
-                            nameEditText.setText(profileObject.getString("Name"));
-                            surnameEditText.setText(profileObject.getString("Surname"));
-                            emailEditText.setText(profileObject.getString("EmailAddress"));
-                            passwordEditText.setText(profileObject.getString("Password"));
-                            securityQuestion.setText(profileObject.getString("SecurityQuestion"));
-                            securityAnswer.setText(profileObject.getString("SecurityAnswer"));
+                            editor.putString("Name", profileObject.getString("Name"));
+                            editor.putString("Surname", profileObject.getString("Surname"));
+                            editor.putString("EmailAddress", profileObject.getString("EmailAddress"));
+                            editor.putString("Password", profileObject.getString("Password"));
+                            editor.putString("SecurityQuestion", profileObject.getString("SecurityQuestion"));
+                            editor.putString("SecurityAnswer", profileObject.getString("SecurityAnswer"));
+                            editor.putString("LicenseNo", profileObject.getString("LicenseNo"));
+                            editor.putString("DateRegistered", profileObject.getString("DateRegistered"));
+                            editor.putString("Country", profileObject.getString("Country"));
+                            editor.putString("UserType", "Athlete");
+
                             if (!profileObject.getString("Weight").equals("null")) {
-                                weightEditText.setText(profileObject.getString("Weight"));
+                                editor.putString("Weight", profileObject.getString("Weight"));
+                            } else {
+                                editor.putString("Weight", "N/A");
                             }
                             if (!profileObject.getString("Height").equals("null")) {
-                                heightEditText.setText(profileObject.getString("Height"));
+                                editor.putString("Height", profileObject.getString("Height"));
+                            } else {
+                                editor.putString("Height", "N/A");
                             }
+                            editor.putString("Gender", profileObject.getString("Gender"));
+                            editor.commit();
+
                             if (profileObject.getString("Gender").equalsIgnoreCase("Male")) {
                                 genderSpinner.setSelectedIndex(1);
                             } else {
                                 genderSpinner.setSelectedIndex(0);
                             }
-
-                            setupMainProfilePage(profileObject.getString("Name") + " "+profileObject.getString("Surname"), profileObject.getString("Height"), profileObject.getString("Weight"), profileObject.getString("DateRegistered"), "Athlete");
-
+                            //setupMainProfilePage(profileObject.getString("Name") + " "+profileObject.getString("Surname"), profileObject.getString("Height"), profileObject.getString("Weight"), profileObject.getString("DateRegistered"), "Athlete");
                         }
                     }
                     break;

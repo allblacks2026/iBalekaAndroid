@@ -1,0 +1,93 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Fragments.DistanceRanFragment"
+    android:orientation="vertical"
+    android:weightSum="100">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:background="@color/primary_dark"
+                android:textColor="@color/whiteColor"
+                android:text="@string/calories_report"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:id = "@+id/DistanceRanStartDateLabel"
+                    android:text="@string/start_date_string"
+                    />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/custom_button"
+                    android:text="Start Date"
+                    android:padding="10sp"
+                    android:id = "@+id/DistanceRanStartDateButton"
+                    android:textColor="@color/whiteColor"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/DistanceRanStartDateLabel"
+                    android:text="@string/end_date_string"
+                    android:layout_marginTop="5dp"
+                    android:id = "@+id/DistanceRanEndDateLabel"
+                    />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/DistanceRanStartDateButton"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="5dp"
+                    android:padding="10sp"
+                    android:text="End Date"
+                    android:background="@color/primary"
+                    android:textColor="@color/whiteColor"
+                    android:id = "@+id/DistanceRanEndDateButton"/>
+            </RelativeLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/custom_button"
+                android:textColor="@color/whiteColor"
+                android:id = "@+id/DistanceRanGenerateReportButton"
+                android:text="@string/generate_report_string"
+                android:padding="10sp"
+                android:layout_marginBottom="5sp"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="100">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.github.mikephil.charting.charts.BarChart
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id = "@+id/DistanceRanBarChart"
+                ></com.github.mikephil.charting.charts.BarChart>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

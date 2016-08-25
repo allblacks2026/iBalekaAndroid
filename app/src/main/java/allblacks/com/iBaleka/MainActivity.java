@@ -22,7 +22,6 @@ import Fragments.ApplicationPreferencesFragment;
 import Fragments.AthleteLandingFragment;
 import Fragments.EditProfileFragment;
 import Listeners.NavigationMenuOnItemSelectedListener;
-import Utilities.iBalekaSingleton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private Toolbar mainActivityToolbar;
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setContentView(R.layout.activity_main);
             initializeControls();
             loadLandingScreenFragment();
-            iBalekaSingleton.setContext(this.getApplicationContext());
         } else {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
@@ -61,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-        //Code to determine the type of login - switch menu according to the user
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mainActivityToolbar, R.string
                 .app_name, R
                 .string
@@ -103,13 +100,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     @Override
     protected void onPause() {
-        editor.putString("ToolbarText", toolbarTextView.getText().toString());
-        editor.commit();
         super.onPause();
     }
+
     protected void onResume() {
         super.onResume();
-        toolbarTextView.setText(activityPreferences.getString("ToolbarText", ""));
     }
     @Override
     public void onBackPressed() {
@@ -172,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 EditProfileFragment editProfileFragment = new EditProfileFragment();
                 FragmentTransaction profileTrans = mgr.beginTransaction();
                 profileTrans.replace(R.id.MainActivityContentArea, editProfileFragment, "EditProfileFragment");
-                toolbarTextView.setText("Edit Profile");
                 profileTrans.addToBackStack(null);
                 profileTrans.commit();
                 break;

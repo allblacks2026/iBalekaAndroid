@@ -11,6 +11,8 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
         <item name="elevation">4dp</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
     </style>
 
     <style name="SpinnerStyle" parent="Widget.AppCompat.Spinner">
@@ -40,9 +42,8 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">5dp</item>
-        <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:padding">10sp</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:padding">5sp</item>
 
     </style>
 

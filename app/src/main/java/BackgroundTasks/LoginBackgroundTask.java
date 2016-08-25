@@ -2,6 +2,8 @@ package BackgroundTasks;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,7 +23,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import Fragments.LoginFragment;
 import allblacks.com.iBaleka.MainActivity;
+import allblacks.com.iBaleka.R;
 
 /**
  * Created by Okuhle on 7/11/2016.
@@ -113,12 +117,13 @@ public class LoginBackgroundTask extends AsyncTask<String, String, String> {
                     globalEditor.putString("Surname", userObj.getString("Surname"));
                     globalEditor.putString("EmailAddress", userObj.getString("EmailAddress"));
                     globalEditor.putString("DateOfBirth", userObj.getString("DateOfBirth"));
-                    globalEditor.putString("UserType", userObj.getString("UserType"));
+                    globalEditor.putString("UserType", "Athlete");
                     globalEditor.putString("Username", userObj.getString("Username"));
                     globalEditor.putString("Password", userObj.getString("Password"));
                     globalEditor.putString("SecurityQuestion", userObj.getString("SecurityQuestion"));
                     globalEditor.putString("SecurityAnswer", userObj.getString("SecurityAnswer"));
                     globalEditor.putString("Country", userObj.getString("Country"));
+                    globalEditor.putString("DateRegistered", userObj.getString("DateRegistered"));
                     globalEditor.commit();
 
                     Intent mainActivity = new Intent(currentContext, MainActivity.class);
@@ -138,7 +143,11 @@ public class LoginBackgroundTask extends AsyncTask<String, String, String> {
         messageBox.setPositiveButton("Got It", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                LoginFragment fragment = new LoginFragment();
+                FragmentManager manager = currentContext.getFragmentManager();
+                FragmentTransaction loginTrans = manager.beginTransaction();
+                loginTrans.replace(R.id.LoginActivityContentArea, fragment, "LoginFragment");
+                loginTrans.commit();
             }
         });
         messageBox.show();
