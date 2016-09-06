@@ -21,8 +21,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import allblacks.com.iBaleka.R;
-
 
 public class GetAthleteProfileBackgroundTask extends AsyncTask<String, String, String> {
 

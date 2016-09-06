@@ -1,9 +1,9 @@
 package allblacks.com.iBaleka;
 
-import android.app.FragmentTransaction;
 import android.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -91,5 +91,11 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 }

@@ -5,73 +5,111 @@ import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Okuhle on 8/19/2016.
  */
-public class Athlete {
+public class Athlete implements Serializable {
 
-    @SerializedName("AthleteID")
+    @SerializedName("athleteId")
     @Expose
     private int athleteID;
 
-    @SerializedName("DateOfBirth")
+    @SerializedName("dateOfBirth")
     @Expose
-    private Date dateOfBirth;
+    private String dateOfBirth;
 
-    @SerializedName("Deleted")
+    @SerializedName("dateJoined")
+    private String dateJoined;
+
+    @SerializedName("deleted")
     @Expose
     private boolean isDeleted;
 
-    @SerializedName("Name")
+    @SerializedName("name")
     @Expose
     private String name;
 
-    @SerializedName("UserName")
+    @SerializedName("userName")
     @Expose
     private String username;
 
-    @SerializedName("Gender")
+    @SerializedName("gender")
     @Expose
     private int gender;
-
-    @SerializedName("Height")
+    @SerializedName("height")
     @Expose
     private double height;
 
-    @SerializedName("Weight")
+    @SerializedName("weight")
     @Expose
     private double weight;
-
-    @SerializedName("Password")
+    @SerializedName("password")
     @Expose
     private String password;
 
-    @SerializedName("EmailAddress")
+    @SerializedName("emailAddress")
     @Expose
     private String emailAddress;
 
-    @SerializedName("SecurityQuestion")
+    @SerializedName("securityQuestion")
     @Expose
     private String securityQuestion;
 
-    @SerializedName("SecurityAnswer")
+    @SerializedName("securityAnswer")
     @Expose
     private String securityAnswer;
 
-    @SerializedName("Surname")
+    @SerializedName("surname")
     @Expose
     private String surname;
-
-    @SerializedName("Country")
+    @SerializedName("country")
     @Expose
     private String country;
 
-    public Athlete(int athleteID, Date dateOfBirth, boolean isDeleted, String name, String username, int gender, double height, double weight, String password, String emailAddress, String securityQuestion, String securityAnswer, String surname, String country) {
+    @SerializedName("clubMember")
+    @Expose
+    private List<ClubMember> clubMember = new ArrayList<>();
+
+    @SerializedName("eventRegistration")
+    @Expose
+    private List<EventRegistration> eventRegistration = new ArrayList<>();
+
+    @SerializedName("run")
+    @Expose
+    private List<Run> run = new ArrayList<>();
+
+    private JSONObject object;
+    public Athlete(JSONObject object) {
+        try {
+            //this.athleteID = object.getInt("athleteId");
+            this.dateOfBirth = object.getString("dateOfBirth");
+            this.dateJoined = object.getString("dateJoined");
+            this.isDeleted = object.getBoolean("deleted");
+            this.name = object.getString("name");
+            this.username = object.getString("userName");
+            this.gender = object.getInt("gender");
+            this.height = object.getDouble("height");
+            this.weight = object.getDouble("weight");
+            this.password = object.getString("password");
+            this.emailAddress = object.getString("emailAddress");
+            this.securityQuestion = object.getString("securityQuestion");
+            this.securityAnswer = object.getString("securityAnswer");
+            this.surname = object.getString("surname");
+            this.country = object.getString("country");
+            this.object = object;
+        } catch (Exception error) {
+
+        }
+    }
+
+    public Athlete(int athleteID, String dateJoined, String dateOfBirth, boolean isDeleted, String name, String username, int gender, double height, double weight, String password, String emailAddress, String securityQuestion, String securityAnswer, String surname, String country) {
         this.athleteID = athleteID;
         this.dateOfBirth = dateOfBirth;
+        this.dateJoined = dateJoined;
         this.isDeleted = isDeleted;
         this.name = name;
         this.username = username;
@@ -86,10 +124,6 @@ public class Athlete {
         this.country = country;
     }
 
-    public Athlete(JSONObject athleteObject) {
-
-    }
-
     public int getAthleteID() {
         return athleteID;
     }
@@ -98,11 +132,11 @@ public class Athlete {
         this.athleteID = athleteID;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -200,5 +234,45 @@ public class Athlete {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public List<ClubMember> getClubMember() {
+        return clubMember;
+    }
+
+    public void setClubMember(List<ClubMember> clubMember) {
+        this.clubMember = clubMember;
+    }
+
+    public List<EventRegistration> getEventRegistration() {
+        return eventRegistration;
+    }
+
+    public void setEventRegistration(List<EventRegistration> eventRegistration) {
+        this.eventRegistration = eventRegistration;
+    }
+
+    public List<Run> getRun() {
+        return run;
+    }
+
+    public void setRun(List<Run> run) {
+        this.run = run;
+    }
+
+    public JSONObject getObject() {
+        return object;
+    }
+
+    public void setObject(JSONObject object) {
+        this.object = object;
+    }
+
+    public String getDateJoined() {
+        return dateJoined;
+    }
+
+    public void setDateJoined(String dateJoined) {
+        this.dateJoined = dateJoined;
     }
 }

@@ -6,35 +6,33 @@ import android.app.DatePickerDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-import BackgroundTasks.RegistrationBackgroundTask;
+import DataAccessLayer.iBalekaClient;
 import Fragments.CreateAccountStepTwoFragment;
-import Models.UserCredential;
-import RetroFit.iBalekaApi;
 import RetroFitModels.Athlete;
+import RetroFitModels.ResponseBody;
 import Utilities.DeviceHardwareChecker;
 import Utilities.TextSanitizer;
 import allblacks.com.iBaleka.MainActivity;
 import allblacks.com.iBaleka.R;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,24 +55,16 @@ public class RegistrationButtonListener implements View.OnClickListener {
     private ProgressDialog progressDialog;
     private SharedPreferences.Editor globalEditor;
     private Retrofit retrofitClient;
-    private iBalekaApi apiService;
     private boolean isWorking = false;
 
     public RegistrationButtonListener(Activity currentActivity) {
         this.currentActivity = currentActivity;
-        appSharedPreferences = currentActivity.getSharedPreferences("iBalekaRegistration", Context.MODE_PRIVATE);
+        appSharedPreferences = PreferenceManager.getDefaultSharedPreferences(currentActivity);
         editor = appSharedPreferences.edit();
         countryList = currentActivity.getResources().getStringArray(R.array.countries_list);
         globalPreferences = PreferenceManager.getDefaultSharedPreferences(currentActivity);
         toolbarTextView = (TextView) currentActivity.findViewById(R.id.LoginActivityToolbarTextView);
         progressDialog = new ProgressDialog(this.currentActivity);
-        //Create the retrofit client and service
-        retrofitClient = new Retrofit.Builder()
-                .baseUrl(currentActivity.getResources().getString(R.string.api_url))
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        apiService = retrofitClient.create(iBalekaApi.class);
-        globalEditor = globalPreferences.edit();
     }
 
     @Override
@@ -88,12 +78,13 @@ public class RegistrationButtonListener implements View.OnClickListener {
                         selectedDay = dayOfMonth;
                         selectedMonth = monthOfYear + 1;
                         selectedYear = year;
-                        selectedDOB.setText(selectedYear + "-" + selectedMonth + "-" + selectedDay);
+                        selectedDOB.setText(selectedYear + "/" + selectedMonth + "/" + selectedDay);
 
-                        editor.putString("DateOfBirth", selectedYear + "/" + selectedMonth + "/" + selectedDay);
+                        editor.putString("dateOfBirth", selectedYear + "/" + selectedMonth + "/" + selectedDay);
                     }
                 }, 2015, 10, 10);
                 dateDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
                 dateDialog.show();
                 break;
             case R.id.NextStepButton:
@@ -105,10 +96,9 @@ public class RegistrationButtonListener implements View.OnClickListener {
                 MaterialSpinner selectedGender = (MaterialSpinner) currentActivity.findViewById(R.id.RegistrationGenderSpinner);
                 int selectedGenderIndex = selectedGender.getSelectedIndex();
                 int selectedCountryIndex = selectedCountry.getSelectedIndex();
-
                 String country = countryList[selectedCountryIndex];
-                String selectedDate = globalPreferences.getString("DateOfBirth", "");
-                editor.putInt("Gender", selectedGenderIndex);
+                String selectedDate = globalPreferences.getString("dateOfBirth", "");
+                editor.putInt("gender", selectedGenderIndex);
                 editor.commit();
                 if (enteredName.getText().toString().length() != 0 && enteredSurname.getText().toString().trim() != null && enteredEmail.getText().toString().trim() != null) {
 
@@ -132,19 +122,24 @@ public class RegistrationButtonListener implements View.OnClickListener {
                     }
                     //If these three parameters have been correctly added, save current information, and move to the next fragment
                     if (isValidName && isValidSurname && isValidEmail) {
-                        editor.putInt("AthleteID", athleteID);
-                        editor.putString("Name", name);
-                        editor.putString("Surname", surname);
-                        editor.putString("EmailAddress", email);
-                        editor.putString("Country", country);
+
+                        editor.putString("name", name);
+                        editor.putString("surname", surname);
+                        editor.putString("emailAddress", email);
+                        editor.putString("country", country);
                         editor.commit();
 
-                        CreateAccountStepTwoFragment nextStepFrag = new CreateAccountStepTwoFragment();
-                        FragmentManager mgr = currentActivity.getFragmentManager();
-                        FragmentTransaction transaction = mgr.beginTransaction();
-                        transaction.replace(R.id.LoginActivityContentArea, nextStepFrag, "NextStepFragment");
-                        transaction.addToBackStack("NextStepFragment");
-                        transaction.commit();
+                        if (selectedDate != "" || selectedDate != null) {
+
+                            CreateAccountStepTwoFragment nextStepFrag = new CreateAccountStepTwoFragment();
+                            FragmentManager mgr = currentActivity.getFragmentManager();
+                            FragmentTransaction transaction = mgr.beginTransaction();
+                            transaction.replace(R.id.LoginActivityContentArea, nextStepFrag, "NextStepFragment");
+                            transaction.addToBackStack("NextStepFragment");
+                            transaction.commit();
+                        } else {
+                            displayMessage("Select Date of Birth", "Please select a date of birth");
+                        }
                     } else {
                         displayMessage("Invalid Registration", "In order to continue with registration, please ensure all fields have data");
                     }
@@ -167,6 +162,13 @@ public class RegistrationButtonListener implements View.OnClickListener {
                         String username = TextSanitizer.sanitizeText(usernameEditText.getText().toString(), false);
                         String password = TextSanitizer.sanitizeText(passwordEditText.getText().toString(), false);
                         String question = TextSanitizer.sanitizeText(securityQuestionSpinner.getText().toString(), false);
+                        String secAnswer = TextSanitizer.sanitizeText(securityAnswerEditText.getText().toString(), false);
+
+                        editor.putString("securityQuestion", question);
+                        editor.putString("securityAnswer", secAnswer);
+                        editor.putString("username", username);
+                        editor.putString("password", password);
+                        editor.commit();
 
                         float height = 0;
                         float weight = 0;
@@ -178,8 +180,8 @@ public class RegistrationButtonListener implements View.OnClickListener {
                             weight = Float.parseFloat(weightEditText.getText().toString());
                         }
 
-                        editor.putFloat("Height",height);
-                        editor.putFloat("Weight", weight);
+                        editor.putFloat("height", height);
+                        editor.putFloat("weight", weight);
                         editor.commit();
 
                         String answer = TextSanitizer.sanitizeText(securityAnswerEditText.getText().toString(), false);
@@ -191,74 +193,39 @@ public class RegistrationButtonListener implements View.OnClickListener {
 
                         if (isValid[0] && isValid[1] && isValid[2] && isValid[3]) {
                         try {
-                            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-                            Date dob = dateFormat.parse(appSharedPreferences.getString("DateOfBirth", ""));
-                            final Athlete newAthlete = new Athlete(appSharedPreferences.getInt("AthleteID", 0), dob, false, appSharedPreferences.getString("Name", ""), appSharedPreferences.getString("Username", ""), appSharedPreferences.getInt("Gender", 0), appSharedPreferences.getFloat("Height", 0), appSharedPreferences.getFloat("Weight", 0), appSharedPreferences.getString("Password", ""), appSharedPreferences.getString("EmailAddress", ""), appSharedPreferences.getString("SecurityQuestion", ""), appSharedPreferences.getString("SecurityAnswer", ""), appSharedPreferences.getString("Surname", ""), appSharedPreferences.getString("Country", ""));
-                            progressDialog.setTitle("Registering Athlete");
-                            progressDialog.setMessage("Please wait while we register you as an athlete...");
+
+                            progressDialog.setTitle("Registering");
+                            progressDialog.setMessage("Please wait while we register you...");
+                            progressDialog.setCancelable(false);
                             progressDialog.show();
 
-                            Call<Athlete> athleteCall = apiService.addAthlete(newAthlete);
-                            athleteCall.enqueue(new Callback<Athlete>() {
-                                @Override
-                                public void onResponse(Call<Athlete> call, Response<Athlete> response) {
-                                    int responseCode = response.code();
-                                    boolean success = response.isSuccessful();
-                                    String message = response.message();
-                                    ResponseBody body = response.errorBody();
-                                    if (success)
-                                    {
-                                        if (progressDialog.isShowing())
-                                        {
-                                            progressDialog.cancel();
-                                        }
-                                        DialogInterface.OnClickListener successListener = new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                globalEditor.putString("AthleteID", Integer.toString(newAthlete.getAthleteID()));
-                                                globalEditor.putString("DateOfBirth", newAthlete.getDateOfBirth().toString());
-                                                globalEditor.putString("isDeleted", Boolean.toString(newAthlete.isDeleted()));
-                                                globalEditor.putString("Name", newAthlete.getName());
-                                                globalEditor.putString("Gender", Integer.toString(newAthlete.getGender()));
-                                                globalEditor.putString("Height", Double.toString(newAthlete.getHeight()));
-                                                globalEditor.putString("Weight", Double.toString(newAthlete.getWeight()));
-                                                globalEditor.putString("Password", newAthlete.getPassword());
-                                                globalEditor.putString("EmailAddress", newAthlete.getEmailAddress());
-                                                globalEditor.putString("SecurityQuestion", newAthlete.getSecurityQuestion());
-                                                globalEditor.putString("SecurityAnswer", newAthlete.getSecurityAnswer());
-                                                globalEditor.putString("Surname", newAthlete.getSurname());
-                                                globalEditor.putString("Country", newAthlete.getCountry());
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
-                                                Intent mainActivityIntent = new Intent(currentActivity, MainActivity.class);
-                                                currentActivity.startActivity(mainActivityIntent);
-                                                currentActivity.finish();
-                                            }
-                                        };
-                                        displayMessage("Registration Successful", "You have successfully registered as an athlete", successListener);
-                                    } else {
-                                        if (progressDialog.isShowing()) {
-                                            progressDialog.cancel();
-                                        }
+                            Date currentDate = new Date();
+                            JSONObject athleteObject = new JSONObject();
 
-                                        displayMessage("Error With Registration", message);
-                                    }
-
-                                }
-
-                                @Override
-                                public void onFailure(Call<Athlete> call, Throwable t) {
-                                    displayMessage("Registration Failed", t.getMessage());
-                                }
-                            });
-
-
-
+                            //athleteObject.put("athleteId", Integer.parseInt(appSharedPreferences.getString("AthleteID", "")));
+                            athleteObject.put("dateOfBirth", appSharedPreferences.getString("DateOfBirth", ""));
+                            athleteObject.put("dateJoined", dateFormat.format(currentDate));
+                            athleteObject.put("deleted", Boolean.parseBoolean("false"));
+                            athleteObject.put("name", appSharedPreferences.getString("name", ""));
+                            athleteObject.put("userName", appSharedPreferences.getString("username", ""));
+                            athleteObject.put("gender", appSharedPreferences.getInt("gender", 0));
+                            athleteObject.put("height", appSharedPreferences.getFloat("height", 0));
+                            athleteObject.put("weight", appSharedPreferences.getFloat("weight", 0));
+                            athleteObject.put("password", appSharedPreferences.getString("password", ""));
+                            athleteObject.put("emailAddress", appSharedPreferences.getString("emailAddress", ""));
+                            athleteObject.put("securityQuestion", appSharedPreferences.getString("securityQuestion", ""));
+                            athleteObject.put("securityAnswer", appSharedPreferences.getString("securityAnswer", ""));
+                            athleteObject.put("surname", appSharedPreferences.getString("surname", ""));
+                            athleteObject.put("country", appSharedPreferences.getString("country", ""));
+                            Athlete newAthlete = new Athlete(athleteObject);
+                            registerAthlete(newAthlete, progressDialog);
 
                         } catch (Exception error) {
-                            displayMessage("Error With Registration", "Error With Registration: \n" +error.getMessage());
+                            progressDialog.cancel();
+                            displayMessage("Error With Registration", error.getMessage() +"\n" + Log.getStackTraceString(error));
                         }
-
-
                         } else {
                             displayMessage("Invalid Data Detected", "One or more text fields contain insufficient / invalid data. Please ensure data entered is between 1 and 100 characters");
                         }
@@ -292,4 +259,46 @@ public class RegistrationButtonListener implements View.OnClickListener {
         messageBox.setPositiveButton("Got it", listener);
         messageBox.show();
     }
+
+
+    private void registerAthlete(Athlete newAthlete, final ProgressDialog dialog) {
+        Retrofit retrofitClient = new Retrofit.Builder()
+                .baseUrl("https://ibalekaapi.azurewebsites.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        iBalekaClient iBalekaClient = retrofitClient.create(DataAccessLayer.iBalekaClient.class);
+        Call<ResponseBody> responseCall = iBalekaClient.registerAthlete(newAthlete);
+        responseCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                dialog.cancel();
+                ResponseBody body = response.body();
+                switch (response.code()) {
+                    case 200:
+                        displayMessage("Registration Successful", "You have successfully registered for iBaleka! Welcome to iBaleka!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent mainScreen = new Intent(currentActivity, MainActivity.class);
+                                currentActivity.startActivity(mainScreen);
+                                currentActivity.finish();
+                            }
+                        });
+                        break;
+                    case 204:
+                        displayMessage("Error Registering for iBaleka", "The server did not return any data");
+                        break;
+                    case 500:
+                        displayMessage("Error Registering For iBaleka", "Internal Server Error");
+                        break;
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                dialog.cancel();
+                displayMessage("Error Registering Athlete", t.getMessage());
+                System.out.println(Log.getStackTraceString(t));
+            }
+        });
+    }
+
 }

@@ -36,7 +36,7 @@
     <string name="total_kilometres_string">Total Distance:</string>
     <string name="sample_km_string">45.79</string>
     <string name="sample_measurment">Kilometres</string>
-    <string name="total_calories_string">Total Calories Burnt:</string>
+    <string name="total_calories_string">Total Calories This Month:</string>
     <string name="sample_calories">3801</string>
     <string name="sample_calorie_measurment">kcal</string>
     <string name="seven_day_activity">Last 7 Days:</string>
@@ -155,7 +155,7 @@
     <string name="country_string">Your Country:</string>
     <string name="event_distance_string">Event Total Distance (km):</string>
     <string name="event_time_string">Event Time:</string>
-    <string name="event_message_string">Event Condition(s):</string>
+    <string name="event_message_string">Event Description: </string>
     <string name="start_point_string">Start Point Location:</string>
     <string name="end_point_string">End Point Location:</string>
     <string name="registered_events_string">A list of all events you are registered to will be displayed below</string>
@@ -179,6 +179,7 @@
     <string name="start_date_string">Select Start Date</string>
     <string name="end_date_string">Select End Date</string>
     <string name="generate_report_string">Generate Report</string>
+    <string name="search_location_string">Search by my current location</string>
     <string-array name="countries_list">
         <item>Afghanistan</item>
         <item>Albania</item>
@@ -422,4 +423,7 @@
         <item>Zambia</item>
         <item>Zimbabwe</item>
     </string-array>
+    <string name="ibaleka_client_id">365022482501-e8krpelnues8b6fo5u44mjv9df6pasb0.apps.googleusercontent.com</string>
+    <string name="ibaleka_secret">s7-UUp3SDL7cj9C6zhUQKVOD</string>
+    <string name="ibaleka_redirect">https://ibalekaapi.azurewebsites.net/.auth/login/google/callback</string>
 </resources>

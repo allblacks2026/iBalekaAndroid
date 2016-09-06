@@ -6,6 +6,69 @@
     android:orientation="vertical"
     android:weightSum="100"
     >
+    
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id = "@+id/CaloriesBurntStartDateLabel"
+               android:text="Select Start Date"
+               android:layout_alignBaseline="@id/CaloriesBurntStartDateButton"
+               android:textSize="16sp"
+               android:textStyle="bold"
+               android:layout_margin="5dp"
+               android:layout_centerInParent="true"
+               />
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id = "@+id/CaloriesBurntStartDateButton"
+               android:layout_alignParentEnd="true"
+               android:layout_margin="5dp"
+               android:background="@drawable/custom_button"
+               android:text="Start Date"
+               android:padding="10sp"
+               android:textColor="@color/whiteColor"/>
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textStyle="bold"
+               android:id = "@+id/CaloriesBurntEndDateLabel"
+               android:text = "Select End Date"
+               android:layout_below="@id/CaloriesBurntStartDateLabel"
+               android:layout_margin="5dp"
+               android:layout_centerHorizontal="true"
+               android:layout_alignBaseline="@id/CaloriesBurntEndDateButton"/>
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_below="@id/CaloriesBurntStartDateButton"
+               android:layout_alignParentEnd="true"
+               android:padding="16sp"
+               android:background="@drawable/custom_button"
+               android:textColor="@android:color/white"
+               android:text= "End Date"
+               android:id = "@+id/CaloriesBurntEndDateButton"
+               android:layout_margin="5dp"/>
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id = "@+id/CaloriesBurntGenerateReportButton"
+               android:layout_centerHorizontal="true"
+               android:layout_below="@id/CaloriesBurntEndDateButton"
+               android:layout_margin="5dp"
+               android:background="@drawable/custom_button"
+               android:textColor="@color/whiteColor"
+               android:text="Generate Report"
+               android:padding="10sp"/>
+       </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -4,89 +4,100 @@
              android:layout_height="match_parent"
              tools:context="Fragments.CreateAccountStepOneFragment"
                 android:orientation="vertical">
-        <TextView
-            style="@style/TextViewStyle"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/register_account_text"
-            android:layout_alignParentTop="true"
-            android:id = "@+id/registerUserDescription"/>
-        <EditText
-            style="@style/EditTexStyle"
-            android:hint="@string/name_text"
-            android:id = "@+id/NameEditText"
-            android:layout_below="@id/registerUserDescription"/>
-        <EditText
-            style="@style/EditTexStyle"
-            android:hint="@string/surname_text"
-            android:id = "@+id/SurnameEditText"
-            android:layout_below="@id/NameEditText"
-            />
-        <EditText
-            style="@style/EditTexStyle"
-            android:hint="@string/email_text"
-            android:id = "@+id/EmailEditText"
-            android:inputType="textEmailAddress"
-            android:layout_below="@id/SurnameEditText"
-            />
-
-        <com.jaredrummler.materialspinner.MaterialSpinner
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:id = "@+id/CountrySpinner"
-            android:layout_below="@id/EmailEditText"
-            android:layout_margin="15dp"
-            android:hint="Select Your Country"
-            android:textAlignment="center"
-            ></com.jaredrummler.materialspinner.MaterialSpinner>
-
-        <com.jaredrummler.materialspinner.MaterialSpinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id = "@+id/RegistrationGenderSpinner"
-            android:layout_margin="15dp"
-            android:hint="Select Your Gender"
-            android:textAlignment="center"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id = "@+id/DateOfBirthLabelText"
-            android:text="@string/date_of_birth_string"
-            android:textAlignment="center"
-            android:layout_below="@id/CountrySpinner"/>
-        <TextView
-            style="@style/TextViewStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:id = "@+id/SelectedDateOfBirthLabel"
-            android:layout_below="@id/DateOfBirthLabelText"
-            android:text="No Date Selected"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/SelectDateOfBirthButton"
-            android:layout_below="@id/SelectedDateOfBirthLabel"
-            android:text="@string/select_dob"
-            android:background="@drawable/custom_button"
-            android:textColor="@color/whiteColor"
-            android:padding="10dp"
-            android:layout_gravity="center"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-                <Button
-                    android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:text="@string/next_step_string"
-                    android:background="@color/primary"
-                    android:textColor="@color/whiteColor"
-                    android:layout_marginTop="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:id = "@+id/NextStepButton" />
-        </RelativeLayout>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                        <TextView
+                            style="@style/TextViewStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/register_account_text"
+                            android:layout_alignParentTop="true"
+                            android:id = "@+id/registerUserDescription"/>
+                        <EditText
+                            style="@style/EditTexStyle"
+                            android:hint="@string/name_text"
+                            android:id = "@+id/NameEditText"
+                            android:layout_below="@id/registerUserDescription"/>
+                        <EditText
+                            style="@style/EditTexStyle"
+                            android:hint="@string/surname_text"
+                            android:id = "@+id/SurnameEditText"
+                            android:layout_below="@id/NameEditText"
+                            />
+                        <EditText
+                            style="@style/EditTexStyle"
+                            android:hint="@string/email_text"
+                            android:id = "@+id/EmailEditText"
+                            android:inputType="textEmailAddress"
+                            android:layout_below="@id/SurnameEditText"
+                            />
 
+                        <com.jaredrummler.materialspinner.MaterialSpinner
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:id = "@+id/CountrySpinner"
+                            android:layout_below="@id/EmailEditText"
+                            android:layout_margin="15dp"
+                            android:hint="Select Your Country"
+                            android:textAlignment="center"
+                            ></com.jaredrummler.materialspinner.MaterialSpinner>
+
+                        <com.jaredrummler.materialspinner.MaterialSpinner
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id = "@+id/RegistrationGenderSpinner"
+                            android:layout_margin="15dp"
+                            android:hint="Select Your Gender"
+                            android:textAlignment="center"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id = "@+id/DateOfBirthLabelText"
+                            android:text="@string/date_of_birth_string"
+                            android:textAlignment="center"
+                            android:layout_below="@id/CountrySpinner"/>
+                        <TextView
+                            style="@style/TextViewStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textSize="18dp"
+                            android:id = "@+id/SelectedDateOfBirthLabel"
+                            android:layout_below="@id/DateOfBirthLabelText"
+                            android:text="No Date Selected"
+                            />
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/SelectDateOfBirthButton"
+                            android:layout_below="@id/SelectedDateOfBirthLabel"
+                            android:text="@string/select_dob"
+                            android:background="@drawable/custom_button"
+                            android:textColor="@color/whiteColor"
+                            android:padding="10dp"
+                            android:layout_gravity="center"/>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                                <Button
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:text="@string/next_step_string"
+                                    android:background="@color/primary"
+                                    android:textColor="@color/whiteColor"
+                                    android:layout_marginTop="30dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:id = "@+id/NextStepButton" />
+                        </RelativeLayout>
+
+
+                </LinearLayout>
+        </ScrollView>
 </LinearLayout>

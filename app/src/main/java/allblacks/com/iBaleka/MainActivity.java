@@ -1,14 +1,15 @@
 package allblacks.com.iBaleka;
+
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,11 +18,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Fragments.AboutApplicationFragment;
 import Fragments.ApplicationPreferencesFragment;
 import Fragments.AthleteLandingFragment;
 import Fragments.EditProfileFragment;
 import Listeners.NavigationMenuOnItemSelectedListener;
+import RetroFitModels.Athlete;
+import RetroFitModels.Club;
+import RetroFitModels.Event;
+import RetroFitModels.Route;
+import RetroFitModels.Run;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private Toolbar mainActivityToolbar;
@@ -34,6 +43,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SharedPreferences activityPreferences;
     private SharedPreferences appSharedPreferences;
     private SharedPreferences.Editor editor;
+    private List<Route> routesList = new ArrayList<>();
+    private Event selectedEvent;
+    private Athlete athlete;
+
+    private List<Event> eventsList = new ArrayList<>();
+    private List<Club> clubsList = new ArrayList<>();
+    private List<Run> athleteEventRuns = new ArrayList<>();
+    private List<Run> athletePersonalRuns = new ArrayList<>();
+
+    public Event getSelectedEvent() {
+        return selectedEvent;
+    }
+
+    public void setSelectedEvent(Event selectedEvent) {
+        this.selectedEvent = selectedEvent;
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
@@ -46,6 +71,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setContentView(R.layout.activity_main);
             initializeControls();
         }
+    }
+
+    public List<Route> getRoutesList() {
+        return routesList;
+    }
+
+    public void setRoutesList(List<Route> routesList) {
+        this.routesList = routesList;
     }
 
     public void initializeControls()
@@ -93,9 +126,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView athleteNameSurname = (TextView) headerView.findViewById(R.id.profileNameSurname);
         TextView emailAddress = (TextView) headerView.findViewById(R.id.profileEmailAddress);
 
-        String nameSurname = appSharedPreferences.getString("Name", "") + " "+ appSharedPreferences.getString("Surname", "");
+        String nameSurname = appSharedPreferences.getString("name", "") + " "+ appSharedPreferences.getString("surname", "");
         athleteNameSurname.setText(nameSurname);
-        emailAddress.setText(appSharedPreferences.getString("EmailAddress", "").toLowerCase());
+        emailAddress.setText(appSharedPreferences.getString("emailAddress", "").toLowerCase());
 
     }
     @Override
@@ -180,5 +213,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         return true;
+    }
+
+    public void setAthlete(Athlete athlete) {
+        this.athlete = athlete;
+    }
+
+    public void setAthletePersonalRuns(List<Run> athletePersonalRuns) {
+        this.athletePersonalRuns = athletePersonalRuns;
+    }
+
+    public void setAthleteEventRuns(List<Run> athleteEventRuns) {
+        this.athleteEventRuns = athleteEventRuns;
+    }
+
+    public void setEventsList(List<Event> eventsList) {
+        this.eventsList = eventsList;
+    }
+
+    public void setClubsList(List<Club> clubsList) {
+        this.clubsList = clubsList;
+    }
+
+    public List<Event> getEventsList() {
+        return eventsList;
+    }
+
+    public List<Club> getClubsList() {
+        return clubsList;
+    }
+
+    public List<Run> getAthleteEventRuns() {
+        return athleteEventRuns;
+    }
+
+    public List<Run> getAthletePersonalRuns() {
+        return athletePersonalRuns;
     }
 }

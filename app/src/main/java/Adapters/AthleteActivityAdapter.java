@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import Models.AthleteActivity;
+import RetroFitModels.Run;
 import allblacks.com.iBaleka.R;
 
 /**
@@ -17,13 +17,13 @@ import allblacks.com.iBaleka.R;
  */
 public class AthleteActivityAdapter extends RecyclerView.Adapter<AthleteActivityAdapter.AthleteViewHolder> {
 
-    private List<AthleteActivity> athleteActivityList;
-    public List<AthleteActivity> getAthleteActivityList()
+    private List<Run> athleteActivityList;
+    public List<Run> getAthleteActivityList()
     {
         return athleteActivityList;
     }
 
-    public void setAthleteActivityList (List<AthleteActivity> athleteActivityList)
+    public void setAthleteActivityList (List<Run> athleteActivityList)
     {
         this.athleteActivityList = athleteActivityList;
     }
@@ -36,10 +36,10 @@ public class AthleteActivityAdapter extends RecyclerView.Adapter<AthleteActivity
 
     @Override
     public void onBindViewHolder(AthleteViewHolder holder, int position) {
-        holder.title.setText(athleteActivityList.get(position).getTitle());
+        holder.title.setText(athleteActivityList.get(position).getDateRecorded());
         holder.distanceCovered.setText(Double.toString(athleteActivityList.get(position)
-                .getDistanceCovered()));
-        holder.dateCovered.setText(athleteActivityList.get(position).getDateCovered());
+                .getDistance()));
+        holder.dateCovered.setText(athleteActivityList.get(position).getRunType());
     }
 
     @Override

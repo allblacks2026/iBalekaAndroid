@@ -1,8 +1,8 @@
 package Fragments;
 
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +45,19 @@ public class CreateAccountStepOneFragment extends Fragment {
         toolbarTextView.setText("Create Account - Step 1 of 2");
         selectedCountrySpinner = (MaterialSpinner) myView.findViewById(R.id.CountrySpinner);
         selectedCountrySpinner.setDropdownMaxHeight(750);
+
         genderSpinner = (MaterialSpinner) myView.findViewById(R.id.RegistrationGenderSpinner);
         genderSpinner.setItems(genderArray);
         String [] countries = this.getResources().getStringArray(R.array.countries_list);
         selectedCountrySpinner.setItems(countries);
-
+        int southAfrica = 0;
+        for (int a = 0; a < countries.length; a++) {
+            String selected = countries[a];
+            if (selected.equalsIgnoreCase("South Africa")) {
+                southAfrica = a;
+            }
+        }
+        selectedCountrySpinner.setSelectedIndex(southAfrica);
         nameEditText = (EditText) myView.findViewById(R.id.NameEditText);
         surnameEditText = (EditText) myView.findViewById(R.id.SurnameEditText);
         emailEditText = (EditText) myView.findViewById(R.id.EmailEditText);
@@ -70,5 +78,6 @@ public class CreateAccountStepOneFragment extends Fragment {
     public void onResume() {
         super.onResume();
         toolbarTextView.setText("Create Account - Step 1 of 2");
+
     }
 }

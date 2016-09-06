@@ -2,29 +2,20 @@ package Adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import BackgroundTasks.RouteCheckpointsBackgroundTask;
-import Fragments.EventDetailsFragment;
-import Models.Event;
+import RetroFitModels.Event;
 import allblacks.com.iBaleka.R;
 
 /**
@@ -56,10 +47,10 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     @Override
     public void onBindViewHolder(SearchResult holder, int position) {
         Event currentEvent = eventsList.get(position);
-        holder.eventTitleTextView.setText(currentEvent.getEventDescription());
-        holder.eventTimeTextView.setText(currentEvent.getEventTime());
-        holder.eventDateTextView.setText(currentEvent.getEventDate());
-        holder.locationTextView.setText(currentEvent.getEventLocation());
+        holder.eventTitleTextView.setText(currentEvent.getTitle());
+        holder.eventTimeTextView.setText(currentEvent.getTime());
+        holder.eventDateTextView.setText(currentEvent.getDate());
+        holder.locationTextView.setText(currentEvent.getLocation());
     }
 
     @Override
@@ -100,26 +91,13 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
                 SharedPreferences eventPreference = currentActivity.getSharedPreferences("EventPreferences", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = eventPreference.edit();
 
-                editor.putString("EventID", selectedEvent.getEventID());
-                editor.putString("EventDescription", selectedEvent.getEventDescription());
-                editor.putString("EventDate", selectedEvent.getEventDate());
-                editor.putString("EventTime", selectedEvent.getEventTime());
-                editor.putString("EventLocation", selectedEvent.getEventLocation());
-                editor.putString("EventStartPoint", selectedEvent.getStartPoint());
-                editor.putString("EventEndPoint", selectedEvent.getEndPoint());
-                editor.putString("EventDistance", selectedEvent.getDistance());
-                editor.putString("EventCondition", selectedEvent.getCondition());
+                editor.putInt("EventID", selectedEvent.getEventId());
+                editor.putString("EventDescription", selectedEvent.getDescription());
+                editor.putString("EventDate", selectedEvent.getDate());
+                editor.putString("EventTime", selectedEvent.getTime());
+                editor.putString("EventLocation", selectedEvent.getLocation());
                 editor.commit();
-                //When this is selected
-                RouteCheckpointsBackgroundTask task = new RouteCheckpointsBackgroundTask(currentActivity);
-                String result = task.execute(selectedEvent.getEventID()).get();
 
-                EventDetailsFragment fragment = new EventDetailsFragment();
-                FragmentManager mgr = currentActivity.getFragmentManager();
-                FragmentTransaction transaction = mgr.beginTransaction();
-                transaction.replace(R.id.MainActivityContentArea, fragment, "EventDetailsFragment");
-                transaction.addToBackStack("EventDetailsFragment");
-                transaction.commit();
             } catch (Exception error) {
                 displayMessage("Error", error.getMessage());
             }

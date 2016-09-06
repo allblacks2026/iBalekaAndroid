@@ -1,26 +1,27 @@
 package Fragments;
+
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,16 +43,10 @@ import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import android.hardware.SensorEventListener;
 
 import java.math.RoundingMode;
 import java.text.DateFormat;
@@ -61,8 +56,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Handler;
 
+import RetroFitModels.Checkpoint;
+import RetroFitModels.Route;
+import RetroFitModels.Run;
 import Utilities.DataContainer;
 import Utilities.DeviceHardwareChecker;
 import Utilities.Stopwatch;
@@ -109,7 +106,7 @@ public class RunningFragment extends Fragment implements LocationListener, View.
     private List<Location> locationsList; //A list of all locations on the route (regardless of pausing or running)
     private List<Location> runnerLocations; //A list of all points the runner has ran
     private String[] timesString = new String[3];
-
+    private SharedPreferences appSharedPreferences;
     //Solution: http://stackoverflow.com/documentation/android/3344/sensormanager#t=201608121519152716905
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -118,6 +115,10 @@ public class RunningFragment extends Fragment implements LocationListener, View.
     private boolean isMoving = false;
     private float [] previousValues = {1.0f, 1.0f, 1.0f};
     private float [] currentValues = new float[3];
+
+    private DateFormat runDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private String runStartTime = "";
+    private String runEndTime = "";
 
     public RunningFragment() {
         // Required empty public constructor
@@ -136,6 +137,7 @@ public class RunningFragment extends Fragment implements LocationListener, View.
         dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         locationsList = new ArrayList<>();
         runnerLocations = new ArrayList<>();
+        appSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         intializeDeviceSensors();
         return currentView;
     }
@@ -262,6 +264,7 @@ public class RunningFragment extends Fragment implements LocationListener, View.
         locationRequest.setInterval(5000);
         locationRequest.setFastestInterval(2000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest);
         PendingResult<LocationSettingsResult> result =
@@ -423,6 +426,9 @@ public class RunningFragment extends Fragment implements LocationListener, View.
                 runStarted = true;
                 timesString[0] = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
                 if (t == 1) {
+                    if (runStartTime == "") {
+                        runStartTime = runDateFormat.format(Calendar.getInstance().getTimeInMillis());
+                    }
                     runStarted = true;
                     runPaused = false;
                     toolbarTextView.setText("Run In Progress");
@@ -454,6 +460,7 @@ public class RunningFragment extends Fragment implements LocationListener, View.
                 runCompleted = true;
                 runStarted = false;
                 startTime = 0L;
+                runEndTime = runDateFormat.format(Calendar.getInstance().getTimeInMillis());
                 timeInMilliseconds = 0L;
                 timeSwapBuff = 0L;
                 updatedTime = 0L;
@@ -470,6 +477,8 @@ public class RunningFragment extends Fragment implements LocationListener, View.
                 distanceTextView.setText("0.0");
                 //Load the results fragment
                 FreeRunResultsFragment fragment = new FreeRunResultsFragment();
+                Bundle fragmentBundle = createRun();
+                fragment.setArguments(fragmentBundle);
                 FragmentManager mgr = getFragmentManager();
                 FragmentTransaction transaction = mgr.beginTransaction();
                 transaction.replace(R.id.MainActivityContentArea, fragment, "FreeRunResultsFragment");
@@ -562,5 +571,36 @@ public class RunningFragment extends Fragment implements LocationListener, View.
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    private Bundle createRun()
+    {
+        //Take the checkpoints ran and move them over
+        try {
+            DateFormat dateRecordFormat = new SimpleDateFormat("yyyy/MM/dd");
+            List<Checkpoint> checkpointsList = new ArrayList<>();
+            for (Location currentLocation : locationsList) {
+                Checkpoint currentPoint = new Checkpoint(0, false, currentLocation.getLatitude(), currentLocation.getLongitude(), 0);
+                checkpointsList.add(currentPoint);
+            }
+            //Take the checkpoints, and add them to a new route
+            Route newRoute = new Route(0, "", "iBaleka Personal Run (Athlete)", runDateFormat.format(Calendar.getInstance().getTimeInMillis()), dateFormat.format(Calendar.getInstance().getTimeInMillis()), false, totalDistance, checkpointsList);
+            //Now that we have created a new route, we can create the athlete's run
+            Run newRun = new Run(0, appSharedPreferences.getInt("athleteId", 0), totalCalories, totalDistance, dateRecordFormat.format(Calendar.getInstance().getTimeInMillis()), false, runEndTime, "Personal", 0, 0, runStartTime, null, null, newRoute);
+            //The run object should be passed to the next fragment as serializable so a rating can be created
+            Bundle runResultsBundle = new Bundle();
+            runResultsBundle.putSerializable("Run", newRun);
+            return runResultsBundle;
+
+
+        } catch (Exception error) {
+            displayMessage("Error Creating Run", error.getMessage(), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            return null;
+        }
     }
 }

@@ -1,25 +1,21 @@
 package Fragments;
 
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.google.android.gms.fitness.request.SensorRequest;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -32,7 +28,8 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import Models.Checkpoint;
+import RetroFitModels.Rating;
+import RetroFitModels.Run;
 import Utilities.DataContainer;
 import allblacks.com.iBaleka.R;
 
@@ -52,6 +49,8 @@ public class FreeRunResultsFragment extends Fragment implements OnMapReadyCallba
     private TextView toolbarTextView;
     private SharedPreferences appPreferences;
     private Button finishRunButton;
+    private RatingBar ratingBar;
+    private Run athleteRun;
 
     //For the accelerometer
 
@@ -66,6 +65,7 @@ public class FreeRunResultsFragment extends Fragment implements OnMapReadyCallba
         // Inflate the layout for this fragment
         View currentView = inflater.inflate(R.layout.fragment_free_run_results, container, false);
         initializeComponents(currentView, savedInstanceState);
+        athleteRun = (Run) getArguments().getSerializable("Run");
         setLabels();
         return currentView;
     }
@@ -86,9 +86,8 @@ public class FreeRunResultsFragment extends Fragment implements OnMapReadyCallba
         finishRunButton.setOnClickListener(this);
         finishRunMapView.getMapAsync(this);
         appPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        ratingBar = (RatingBar) currentView.findViewById(R.id.FinishRunRatingBar);
     }
-
-
 
     private void setLabels()
     {
@@ -117,6 +116,7 @@ public class FreeRunResultsFragment extends Fragment implements OnMapReadyCallba
     @Override
     public void onClick(View v) {
         //When this button is pressed, the user must be taken back to their home landing screen
+        Rating runRating = new Rating();
         FragmentManager mgr = getFragmentManager();
         FragmentTransaction transaction = mgr.beginTransaction();
         transaction.replace(R.id.MainActivityContentArea, new AthleteLandingFragment(), "AthleteLandingFragment");

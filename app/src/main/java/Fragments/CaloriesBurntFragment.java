@@ -1,12 +1,20 @@
 package Fragments;
 
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -15,23 +23,37 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.AxisValueFormatter;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
-import Models.CaloriesBurnt;
+import DataAccessLayer.iBalekaClient;
+import RetroFitModels.RunArray;
 import allblacks.com.iBaleka.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CaloriesBurntFragment extends Fragment {
+public class CaloriesBurntFragment extends Fragment implements View.OnClickListener {
 
     private BarChart caloriesBurntChart;
-    private List<CaloriesBurnt> caloriesBurntList;
     private TextView toolbarTextView;
+    private TextView startDateLabel;
+    private TextView endDateLabel;
+    private Button startDateButton;
+    private Button endDateButton;
+    private Button generateReportButton;
+    private int [] startArray = new int[3];
+    private int [] endArray = new int[3];
 
     public CaloriesBurntFragment() {
         // Required empty public constructor
@@ -48,87 +70,104 @@ public class CaloriesBurntFragment extends Fragment {
     }
 
     private void initializeComponents(View currentView) {
-        caloriesBurntList = new ArrayList<>();
         caloriesBurntChart = (BarChart) currentView.findViewById(R.id.CaloriesBurntChart);
         toolbarTextView = (TextView) getActivity().findViewById(R.id.MainActivityTextView);
         toolbarTextView.setText("Your Calories Burnt");
-        createSampleCalorieObjects();
-        setupChart();
-    }
+        startDateLabel = (TextView) currentView.findViewById(R.id.CaloriesBurntStartDateLabel);
+        endDateLabel = (TextView) currentView.findViewById(R.id.CaloriesBurntEndDateLabel);
+        startDateButton = (Button) currentView.findViewById(R.id.CaloriesBurntStartDateButton);
+        endDateButton = (Button) currentView.findViewById(R.id.CaloriesBurntEndDateButton);
+        generateReportButton = (Button) currentView.findViewById(R.id.CaloriesBurntGenerateReportButton);
+        endDateButton.setOnClickListener(this);
+        startDateButton.setOnClickListener(this);
 
-    private void createSampleCalorieObjects()
-    {
-        CaloriesBurnt one = new CaloriesBurnt("2016/05/05", 490.28);
-        CaloriesBurnt two = new CaloriesBurnt("2016/05/08", 490.11);
-        CaloriesBurnt three = new CaloriesBurnt("2016/05/12", 394.18);
-        CaloriesBurnt four = new CaloriesBurnt("2016/05/15", 400.23);
-        CaloriesBurnt five = new CaloriesBurnt("2016/05/18", 412.11);
-        CaloriesBurnt six = new CaloriesBurnt("2016/05/22", 333.54);
-        CaloriesBurnt seven = new CaloriesBurnt("2016/05/25", 280.55);
-        CaloriesBurnt eight = new CaloriesBurnt("2016/05/28", 290.67);
-        CaloriesBurnt nine = new CaloriesBurnt("2016/05/30", 300.01);
-
-        caloriesBurntList.add(one);
-        caloriesBurntList.add(two);
-        caloriesBurntList.add(three);
-        caloriesBurntList.add(four);
-        caloriesBurntList.add(five);
-        caloriesBurntList.add(six);
-        caloriesBurntList.add(seven);
-        caloriesBurntList.add(eight);
-        caloriesBurntList.add(nine);
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.CaloriesBurntStartDateButton:
+                DatePickerDialog dialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        startArray[0] = year;
+                        startArray[1] = monthOfYear + 1;
+                        startArray[2] = dayOfMonth;
+                    }
+                }, 0,0,0);
+                dialog.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
+                dialog.show();
+                break;
+            case R.id.CaloriesBurntEndDateButton:
+                DatePickerDialog dialog1 = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        endArray[0] = year;
+                        endArray[1] = monthOfYear + 1;
+                        endArray[2] = dayOfMonth;
+                    }
+                }, 0,0,0);
+                dialog1.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
+                dialog1.show();
+                break;
+            case R.id.CaloriesBurntGenerateReportButton:
+                DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+                boolean isValid = true;
+                for (int a = 0; a < startArray.length; a++) {
+                    if (startArray[a] == 0 || endArray[a] == 0) {
+                        isValid = false;
+                        break;
+                    }
+                }
 
-    private void setupChart()
-    {
-        List<String> dateEntries = new ArrayList<>();
-       List<BarEntry> entries = new ArrayList<>();
-        for (int a = 0; a < caloriesBurntList.size(); a++) {
-            CaloriesBurnt current = caloriesBurntList.get(a);
-            entries.add(new BarEntry(a, Float.valueOf(String.valueOf(current.getCalorieCount()))));
-            dateEntries.add(current.getDateBurnt());
+                if (isValid) {
+                    final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                    progressDialog.setTitle("Getting Calorie Information");
+                    progressDialog.setMessage("Please wait while we fetch your calorie information. This may take a few seconds depending on your internet connection");
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
+                    SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl("htpps://ibalekaapi.azurewebsites.net/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    iBalekaClient client = retrofit.create(iBalekaClient.class);
+                    Call<RunArray> responseBody = client.getAllRuns(appPreferences.getInt("ahtleteId", 0));
+                    responseBody.enqueue(new Callback<RunArray>() {
+                        @Override
+                        public void onResponse(Call<RunArray> call, Response<RunArray> response) {
+                            if (progressDialog.isShowing()) {
+                                progressDialog.cancel();
+                            }
+                            if (response.code() == 200) {
+
+                            } else {
+                                displayMessage("Error Getting Calorie Data", "An error occurred when getting calorie data" +response.message());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<RunArray> call, Throwable t) {
+
+                        }
+                    });
+                } else {
+                    displayMessage("Error Generating Report", "Please ensure you have selected a valid start date and a valid end date");
+                }
+
+
+                break;
         }
+    }
 
-        String [] dates = new String[dateEntries.size()];
-        for (int a = 0; a < dateEntries.size(); a++) {
-            dates[a] = dateEntries.get(a);
-        }
-
-        class MyXAxis implements AxisValueFormatter {
-
-            private String [] values;
-            public MyXAxis(String [] values) {
-                this.values = values;
-            }
+    public void displayMessage(String title, String message) {
+        AlertDialog.Builder messageBox = new AlertDialog.Builder(getActivity());
+        messageBox.setTitle(title).setMessage(message).setPositiveButton("Got It", new DialogInterface.OnClickListener() {
             @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return values[(int) value];
-            }
+            public void onClick(DialogInterface dialog, int which) {
 
-            @Override
-            public int getDecimalDigits() {
-                return 0;
             }
-        }
-
-        MyXAxis axisFormat = new MyXAxis(dates);
-        BarDataSet dataSet = new BarDataSet(entries, "CaloriesBurnt");
-        dataSet.setValueTextColor(Color.RED);
-        BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.9f);
-        dataSet.setColor(getResources().getColor(R.color.primary));
-        caloriesBurntChart.setData(barData);
-        caloriesBurntChart.setFitBars(true);
-        XAxis chartXAxis = caloriesBurntChart.getXAxis();
-        chartXAxis.setValueFormatter(axisFormat);
-        chartXAxis.setLabelRotationAngle(70f);
-        chartXAxis.setGranularity(1f);
-        chartXAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        caloriesBurntChart.setDescription("");
-        caloriesBurntChart.setNoDataText("No Calorie Data Available");
-        caloriesBurntChart.invalidate();
+        }).show();
     }
-
 }

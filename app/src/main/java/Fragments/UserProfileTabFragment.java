@@ -1,15 +1,19 @@
 package Fragments;
 
+import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import BackgroundTasks.GetAthleteProfileBackgroundTask;
+import RetroFitModels.Run;
 import allblacks.com.iBaleka.R;
 
 /**
@@ -28,15 +32,12 @@ public class UserProfileTabFragment extends Fragment {
     private TextView nameSurnameTextView;
     private TextView userTypeTextView;
     private TextView userCountryTextView;
+    private List<Run> runsList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.user_profile_tab_layout, container, false);
-        appSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        backgroundTask = new GetAthleteProfileBackgroundTask(getActivity());
-        backgroundTask.execute(appSharedPreferences.getString("EmailAddress", ""));
         initializeComponents(myView);
-        setupData();
         return myView;
     }
 
@@ -51,18 +52,18 @@ public class UserProfileTabFragment extends Fragment {
         nameSurnameTextView = (TextView) currentView.findViewById(R.id.profileNameSurnameTextView);
         userTypeTextView = (TextView) currentView.findViewById(R.id.userTypeTextView);
         userCountryTextView = (TextView) currentView.findViewById(R.id.countryTextView);
-
+        appSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
 
     private void setupData() {
-        weightTextView.setText(appSharedPreferences.getString("Weight", ""));
-        heightTextView.setText(appSharedPreferences.getString("Height", ""));
-        nameSurnameTextView.setText(appSharedPreferences.getString("Name", "") + " "+appSharedPreferences.getString("Surname", ""));
-        dateRegistered.setText(appSharedPreferences.getString("DateRegistered", ""));
-        totalPersonalRunsTextView.setText(appSharedPreferences.getString("TotalPersonalRuns", ""));
-        totalEventRunsTextView.setText(appSharedPreferences.getString("TotalEventRuns", ""));
-        userTypeTextView.setText(appSharedPreferences.getString("UserType", ""));
-        userCountryTextView.setText(appSharedPreferences.getString("Country", ""));
+        weightTextView.setText(Float.toString(appSharedPreferences.getFloat("weight", 0)));
+        heightTextView.setText(Float.toString(appSharedPreferences.getFloat("height", 0)));
+        nameSurnameTextView.setText(appSharedPreferences.getString("name", "") + " "+appSharedPreferences.getString("surname", ""));
+        dateRegistered.setText(appSharedPreferences.getString("dateJoined", ""));
+        totalPersonalRunsTextView.setText(Float.toString(appSharedPreferences.getFloat("totalPersonalRuns", 0)));
+        totalEventRunsTextView.setText(Float.toString(appSharedPreferences.getFloat("totalEventRuns", 0)));
+        userTypeTextView.setText("Athlete");
+        userCountryTextView.setText(appSharedPreferences.getString("country", ""));
     }
 
     @Override
@@ -71,4 +72,6 @@ public class UserProfileTabFragment extends Fragment {
         toolbarTextView.setText("View Your Profile");
         setupData();
     }
+
+
 }

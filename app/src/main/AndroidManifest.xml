@@ -16,6 +16,7 @@
         android:name="android.support.multidex.MultiDexApplication"
         >
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDXMQFRTA-9ljgH70jMmbKPasyoIqLzpks"/>
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <activity android:name="allblacks.com.iBaleka.AppSplashScreen"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -27,6 +28,14 @@
         <activity android:name="allblacks.com.iBaleka.LoginActivity"
                   android:windowSoftInputMode="stateUnchanged"
             android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="ibalekaapi.azurewebsites.net"
+                    android:scheme="https://"/>
+            </intent-filter>
         </activity>
         <activity android:name="allblacks.com.iBaleka.MainActivity"
             android:screenOrientation="portrait"

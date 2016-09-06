@@ -1,12 +1,12 @@
 package Fragments;
 
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -58,7 +58,6 @@ public class ProfileFragment extends Fragment implements ViewPager.OnPageChangeL
         profileViewPageAdapter.addFragmentWithTitle(new UserProfileTabFragment(), "My Profile");
         profileViewPageAdapter.addFragmentWithTitle(new EditProfileFragment(), "Edit Profile");
         profileViewPageAdapter.addFragmentWithTitle(new UserActivityTabFragment(), "My Activity");
-        profileViewPageAdapter.addFragmentWithTitle(new CaloriesBurntFragment(), "Calories Burnt");
         profileViewPager.setAdapter(profileViewPageAdapter);
         profileTabLayout.setupWithViewPager(profileViewPager);
         toolbarTextView.setText("View Your Profile");
@@ -91,9 +90,6 @@ public class ProfileFragment extends Fragment implements ViewPager.OnPageChangeL
         } else if (position == 2) {
             profileEditor.putString("ToolbarText", "View Your Activity");
             toolbarTextView.setText("View Your Activity");
-            profileEditor.commit();
-        } else if (position == 3) {
-            toolbarTextView.setText("Your Calories Burnt");
             profileEditor.commit();
         }
     }

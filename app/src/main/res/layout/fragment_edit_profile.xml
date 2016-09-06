@@ -110,13 +110,11 @@
                     android:textAlignment="center"
                     android:layout_margin="5dp"
                     android:inputType="numberDecimal"/>
-                <EditText
-                    android:layout_height="wrap_content"
+                <com.jaredrummler.materialspinner.MaterialSpinner
                     android:layout_width="match_parent"
-                    android:hint="@string/license_no_hint"
-                    android:textAlignment="center"
-                    android:layout_margin="5dp"
-                    android:id = "@+id/LicenseNumberEditText"/>
+                    android:layout_height="match_parent"
+                    android:id = "@+id/SelectedCountrySpinner"
+                    android:layout_margin="5dp"/>
                 <com.jaredrummler.materialspinner.MaterialSpinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

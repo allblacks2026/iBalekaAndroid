@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import Models.RegisteredEvent;
+import RetroFitModels.Event;
 import allblacks.com.iBaleka.R;
 
 /**
@@ -19,7 +19,7 @@ import allblacks.com.iBaleka.R;
  */
 public class RegisteredEventsAdapter extends RecyclerView.Adapter<RegisteredEventsAdapter.RegisteredEvents> {
 
-    private List<RegisteredEvent> registeredEventList;
+    private List<Event> registeredEventList;
     private Activity currentActivity;
 
     public RegisteredEventsAdapter(Activity currentActivity)
@@ -28,11 +28,11 @@ public class RegisteredEventsAdapter extends RecyclerView.Adapter<RegisteredEven
         registeredEventList = new ArrayList<>();
     }
 
-    public List<RegisteredEvent> getRegisteredEventList() {
+    public List<Event> getRegisteredEventList() {
         return registeredEventList;
     }
 
-    public void setRegisteredEventList(List<RegisteredEvent> registeredEventList) {
+    public void setRegisteredEventList(List<Event> registeredEventList) {
         this.registeredEventList = registeredEventList;
     }
 

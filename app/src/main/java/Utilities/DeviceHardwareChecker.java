@@ -1,15 +1,10 @@
 package Utilities;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 //References: http://developer.android

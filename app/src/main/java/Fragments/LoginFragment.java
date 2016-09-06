@@ -1,12 +1,9 @@
 package Fragments;
 
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -17,12 +14,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -30,8 +33,6 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-import com.google.android.gms.wallet.NotifyTransactionStatusRequest;
-import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +41,8 @@ import Listeners.LoginButtonListener;
 import Utilities.DataContainer;
 import allblacks.com.iBaleka.R;
 
-public class LoginFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+public class LoginFragment extends Fragment {
 
-    private static final int SIGN_IN_REQUEST = 400;
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button loginButton;
@@ -51,9 +51,8 @@ public class LoginFragment extends Fragment implements GoogleApiClient.OnConnect
     private LoginButtonListener buttonListener;
     private List<String> signInList;
     private TextView toolbarTextView;
-    private GoogleApiClient googleApiClient;
-    private GoogleSignInOptions googleSignInOptions;
-    private SignInButton googleSignInButton;
+    private LoginButton facebookLoginButton;
+    private CallbackManager callbackManager;
 
 
     public LoginFragment() {
@@ -62,9 +61,9 @@ public class LoginFragment extends Fragment implements GoogleApiClient.OnConnect
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View currentView = inflater.inflate(R.layout.fragment_login, container, false);
-        buildGoogleSignIn();
-        buildGoogleApi();
         initializeComponents(currentView);
+        FacebookSdk.sdkInitialize(getActivity());
+        AppEventsLogger.activateApp(getActivity());
         return currentView;
     }
 
@@ -83,88 +82,35 @@ public class LoginFragment extends Fragment implements GoogleApiClient.OnConnect
         loginButton.setOnClickListener(buttonListener);
         forgotPasswordButton.setOnClickListener(buttonListener);
         createAccountButton.setOnClickListener(buttonListener);
-        googleSignInButton = (SignInButton) currentView.findViewById(R.id.GoogleSignInButton);
-        googleSignInButton.setSize(SignInButton.SIZE_WIDE);
-        googleSignInButton.setOnClickListener(new View.OnClickListener() {
+        facebookLoginButton = (LoginButton) currentView.findViewById(R.id.FacebookLoginButton);
+        facebookLoginButton.setFragment(this);
+        callbackManager = CallbackManager.Factory.create();
+        facebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onClick(View v) {
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-                startActivityForResult(signInIntent, SIGN_IN_REQUEST);
+            public void onSuccess(LoginResult loginResult) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
             }
         });
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SIGN_IN_REQUEST) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            final GoogleSignInAccount account = result.getSignInAccount(); //Information of account is loaded here
-            Plus.PeopleApi.load(googleApiClient, account.getId()).setResultCallback(new ResultCallback<People.LoadPeopleResult>() {
-                @Override
-                public void onResult(@NonNull People.LoadPeopleResult loadPeopleResult) {
-                    Person googlePerson = loadPeopleResult.getPersonBuffer().get(0);
-                    displayPerson(account, googlePerson);
-                }
-            });
-        }
-    }
 
-    public void displayPerson(GoogleSignInAccount account, Person p) {
-
-        DataContainer.getDataContainerInstance().setGoogleSignInAccount(account);
-        DataContainer.getDataContainerInstance().setGooglePerson(p);
-
-        if (account != null && p != null) {
-            getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.LoginActivityContentArea, new GoogleSignUpFragment(), "GoogleSignUpFragment")
-                    .addToBackStack("GoogleSignUpFragment")
-                    .commit();
-        } else {
-            Toast.makeText(getActivity(), "Error Getting Google Profile", Toast.LENGTH_SHORT).show();
-        }
-
-    }
 
     @Override
     public void onResume() {
         super.onResume();
         toolbarTextView.setText("Login to Continue");
-        buildGoogleApi();
     }
 
-    private void buildGoogleApi() {
-        googleApiClient = new GoogleApiClient.Builder(getActivity(), this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
-                .addApi(Plus.API)
-                .addScope(Plus.SCOPE_PLUS_PROFILE).build();
-        googleApiClient.connect(GoogleApiClient.SIGN_IN_MODE_OPTIONAL);
-    }
 
-    private void buildGoogleSignIn()
-    {
-        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(Plus.SCOPE_PLUS_LOGIN, Plus.SCOPE_PLUS_PROFILE, new Scope("https://www.googleapis.com/auth/plus.profile.emails.read"))
-                .requestEmail()
-                .requestProfile()
-                .requestId()
-                .build();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
 }

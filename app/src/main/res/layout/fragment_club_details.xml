@@ -1,0 +1,130 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Fragments.ClubDetailsFragment">
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:card_view = "http://schemas.android.com/apk/res-auto"
+        card_view:cardCornerRadius="2dp"
+        card_view:contentPadding="10dp"
+        android:layout_margin="5dp"
+        android:clickable="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id = "@+id/ClubResultsClubNameLabel"
+                android:layout_alignParentStart="true"
+                android:text="Club Name"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id = "@+id/ClubResultsClubNameTextView"
+                android:layout_alignBaseline="@id/ClubResultsClubNameLabel"
+                android:layout_alignParentEnd="true"
+                android:text="0"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ClubResultsClubNameLabel"
+                android:id = "@+id/ClubResultsClubDescriptionLabel"
+                android:text="Club Description"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id = "@+id/ClubResultsClubDescriptionTextView"
+                android:text="0"
+                android:layout_alignBaseline="@id/ClubResultsClubDescriptionLabel"
+                android:layout_alignParentEnd="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id = "@+id/ClubResultsClubLocationLabel"
+                android:layout_below="@id/ClubResultsClubDescriptionLabel"
+                android:layout_alignParentStart="true"
+                android:text="Club Location"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id = "@+id/ClubResultsClubLocationTextView"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBaseline="@id/ClubResultsClubLocationLabel"
+                android:layout_below="@id/ClubResultsClubLocationLabel"
+                android:text = "0"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id = "@+id/ClubResultsClubCreatedLavel"
+                android:text="Date Created"
+                android:textStyle="bold"
+                android:layout_below="@id/ClubResultsClubLocationLabel"
+                android:layout_marginTop="5dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id = "@+id/ClubResultsClubCreatedTextView"
+                android:text="0"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBaseline="@id/ClubResultsClubCreatedLavel"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Total Events Created"
+                android:layout_below="@id/ClubResultsClubCreatedLavel"
+                android:layout_marginTop="5dp"
+                android:id = "@+id/ClubResultsTotalEventsLabel"
+                android:layout_alignParentStart="true"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id = "@+id/ClubResultsTotalEventsTextView"
+                android:text="0"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBaseline="@id/ClubResultsTotalEventsLabel"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ClubResultsTotalMembersLabel"
+                android:text="Total Club Members"
+                android:layout_below="@id/ClubResultsTotalEventsLabel"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                android:layout_alignParentStart="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id = "@+id/ClubResultsTotalMembersTextView"
+                android:text="0"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/ClubResultsTotalEventsTextView"
+                android:layout_alignBaseline="@id/ClubResultsTotalMembersLabel"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_button"
+                android:textColor="@android:color/white"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/ClubResultsTotalMembersTextView"
+                android:layout_marginTop="5dp"
+                android:padding="10sp"
+                android:text="Join Club"
+                android:id = "@+id/ClubResultsJoinClubButton"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>

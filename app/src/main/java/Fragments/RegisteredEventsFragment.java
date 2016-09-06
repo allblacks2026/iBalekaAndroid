@@ -1,9 +1,9 @@
 package Fragments;
 
 
+import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import BackgroundTasks.AthleteEventBackgroundTask;
+
 import allblacks.com.iBaleka.R;
 
 public class RegisteredEventsFragment extends Fragment {
@@ -30,7 +30,7 @@ public class RegisteredEventsFragment extends Fragment {
         View currentView =  inflater.inflate(R.layout.fragment_registered_events, container, false);
         initializeComponents(currentView);
         if (savedInstanceState == null) {
-            runTask();
+
         }
         return currentView;
     }
@@ -42,12 +42,6 @@ public class RegisteredEventsFragment extends Fragment {
         toolbarTextView.setText("View Registered Events");
     }
 
-    private void runTask()
-    {
-        globalPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        AthleteEventBackgroundTask backgroundTask = new AthleteEventBackgroundTask(getActivity());
-        backgroundTask.execute(globalPreferences.getString("EmailAddress", ""));
-    }
 
     @Override
     public void onResume() {

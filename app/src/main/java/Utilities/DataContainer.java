@@ -1,8 +1,6 @@
 package Utilities;
 
-import android.app.Application;
 import android.location.Location;
-import android.provider.ContactsContract;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.plus.model.people.Person;
@@ -11,7 +9,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import Models.Checkpoint;
+import RetroFitModels.Checkpoint;
 
 /**
  * Created by Okuhle on 7/24/2016.

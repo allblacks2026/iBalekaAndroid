@@ -2,22 +2,16 @@ package Fragments;
 
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.util.List;
-
-import Adapters.SearchResultsAdapter;
-import BackgroundTasks.SearchEventsBackgroundTask;
-import Models.Event;
 import allblacks.com.iBaleka.R;
 
 /**
@@ -25,10 +19,7 @@ import allblacks.com.iBaleka.R;
  */
 public class SearchResultsFragment extends Fragment {
     private RecyclerView searchResultsRecyclerView;
-    private SearchEventsBackgroundTask searchEventsBackgroundTask;
     private SharedPreferences appSharedPreferences;
-    private SearchResultsAdapter searchAdapter;
-    private List<Event> eventsList;
     private TabLayout searchTabLayout;
     private TextView toolbarTextView;
 
@@ -48,20 +39,6 @@ public class SearchResultsFragment extends Fragment {
     private void initializeComponents(View thisView) {
         toolbarTextView = (TextView) getActivity().findViewById(R.id.MainActivityTextView);
         toolbarTextView.setText("View Search Results");
-    }
-
-    private void startSearch()
-    {
-            String searchCriteria = appSharedPreferences.getString("SearchCriteria", "");
-            boolean sortByDate = appSharedPreferences.getBoolean("SortByDate", false);
-            searchEventsBackgroundTask = new SearchEventsBackgroundTask(getActivity());
-            searchAdapter = new SearchResultsAdapter(getActivity());
-            searchEventsBackgroundTask.execute(searchCriteria);
-            eventsList = searchEventsBackgroundTask.getEventsList();
-            if (eventsList.size() != 0) {
-                searchAdapter.setEventsList(eventsList);
-                searchResultsRecyclerView.setAdapter(searchAdapter);
-            }
     }
 
     public void displayMessage(String title, String message) {

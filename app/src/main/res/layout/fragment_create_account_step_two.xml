@@ -2,66 +2,67 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="Fragments.CreateAccountStepTwoFragment"
-    android:orientation="vertical">
-    <TextView
-        style="@style/TextViewStyle"
-        android:text="@string/account_reg_text"
-        android:layout_alignParentTop="true"
-        android:id = "@+id/createAccountTextView"/>
-
-    <EditText
-        style="@style/EditTexStyle"
-        android:hint="@string/username_text"
-        android:id = "@+id/UsernameEditText"
-        android:layout_below="@id/createAccountTextView"/>
-    <EditText
-        style="@style/EditTexStyle"
-        android:hint="@string/password_text"
-        android:inputType="textPassword"
-        android:id = "@+id/PasswordEditText"
-        android:layout_below="@id/UsernameEditText"/>
-    <com.jaredrummler.materialspinner.MaterialSpinner
-        style="@style/EditTexStyle"
-        android:id = "@+id/SecurityQuestionSpinner"
-        android:hint="@string/security_question_text"
-        android:layout_below="@id/PasswordEditText"/>
-    <EditText
-        style="@style/EditTexStyle"
-        android:hint="@string/security_answer_text"
-        android:maxLines="3"
-        android:id = "@+id/SecurityAnswerEditText"
-/>
-
-    <EditText
-        style="@style/EditTexStyle"
-        android:hint="Enter Height"
-        android:inputType="numberDecimal"
-        android:id = "@+id/CreateAccountHeightEditText"/>
-    <EditText
-        style="@style/EditTexStyle"
-        android:hint="Enter Weight"
-        android:inputType="numberDecimal"
-        android:id = "@+id/CreateAccountWeightEditText"/>
-
-    <RelativeLayout
+             tools:context="Fragments.CreateAccountStepTwoFragment">
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_button"
-            android:textColor="@color/whiteColor"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:text="@string/create_account_text"
-            android:id = "@+id/CreateAccountButton"
-            android:layout_gravity="center"
-            android:layout_alignParentBottom="true"
-            />
-    </RelativeLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                style="@style/TextViewStyle"
+                android:text="@string/account_reg_text"
+                android:id = "@+id/createAccountTextView"/>
 
+            <EditText
+                style="@style/EditTexStyle"
+                android:hint="@string/username_text"
+                android:id = "@+id/UsernameEditText"
+                android:maxLines="1"/>
+            <EditText
+                style="@style/EditTexStyle"
+                android:hint="@string/password_text"
+                android:inputType="textPassword"
+                android:id = "@+id/PasswordEditText"
+                android:maxLines="1"/>
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                style="@style/EditTexStyle"
+                android:id = "@+id/SecurityQuestionSpinner"
+                android:hint="@string/security_question_text" />
+            <EditText
+                style="@style/EditTexStyle"
+                android:hint="@string/security_answer_text"
+                android:maxLines="1"
+                android:id = "@+id/SecurityAnswerEditText"
+                />
 
+            <EditText
+                style="@style/EditTexStyle"
+                android:hint="Enter Height"
+                android:inputType="numberDecimal"
+                android:id = "@+id/CreateAccountHeightEditText"/>
+            <EditText
+                style="@style/EditTexStyle"
+                android:hint="Enter Weight"
+                android:inputType="numberDecimal"
+                android:id = "@+id/CreateAccountWeightEditText"/>
 
-
-
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <Button
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@color/whiteColor"
+                    android:layout_width="match_parent"
+                    android:text="@string/create_account_text"
+                    android:id = "@+id/CreateAccountButton"
+                    android:layout_alignParentBottom="true"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

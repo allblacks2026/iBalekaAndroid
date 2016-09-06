@@ -14,7 +14,7 @@ import Fragments.ProfileFragment;
 import Fragments.RegisteredEventsFragment;
 import Fragments.ReportExplorerFragment;
 import Fragments.RunningFragment;
-import Fragments.StartRunFragment;
+import Fragments.SearchClubsFragment;
 import Fragments.StartSearchFragment;
 import Utilities.DeviceHardwareChecker;
 import allblacks.com.iBaleka.R;
@@ -116,7 +116,22 @@ public class NavigationMenuOnItemSelectedListener implements NavigationView.OnNa
                 } else {
                     drawerLayout.closeDrawers();
                 }
-
+                break;
+            case R.id.joinClubOption:
+                DeviceHardwareChecker checker2 = new DeviceHardwareChecker(currentActivity);
+                checker2.checkNetworkConnection();
+                if (checker2.isConnectedToInternet()){
+                    drawerLayout.closeDrawers();
+                    navigationView.getMenu().clear();
+                    navigationView.inflateMenu(R.menu.athlete_navigation_menu);
+                    SearchClubsFragment clubsFragment = new SearchClubsFragment();
+                    FragmentTransaction transaction = mgr.beginTransaction();
+                    transaction.replace(R.id.MainActivityContentArea, clubsFragment, "ClubsFragment");
+                    transaction.addToBackStack("ClubsFragment");
+                    transaction.commit();
+                } else {
+                    drawerLayout.closeDrawers();
+                }
         }
         return true;
     }

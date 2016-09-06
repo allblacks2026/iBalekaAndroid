@@ -131,18 +131,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id= "@+id/FinishRunWAVARating"
-                    android:text="@string/wava_rating_string"
+                    android:id = "@+id/FinishRunRatingLabel"
+                    android:text = "Rate Your Run: "
                     android:layout_below="@id/FinishRunHighestSpeedLabel"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="5dp"/>
-                <TextView
+                    android:layout_margin="5dp"/>
+                <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/FinishRunWAVARatingTextView"
-                    android:text="0.0"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignBaseline="@id/FinishRunWAVARating"/>
+                    android:id = "@+id/FinishRunRatingBar"
+                    android:layout_alignBaseline="@id/FinishRunRatingLabel"
+                    android:numStars="5"
+                    style="?android:attr/ratingBarStyleSmall"/>
             </RelativeLayout>
             <Button
                 android:layout_width="wrap_content"

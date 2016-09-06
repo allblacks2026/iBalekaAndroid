@@ -12,7 +12,7 @@
         android:id = "@+id/MainActivityToolbar"
         android:background="@color/primary"
         android:elevation="4dp"
-
+        app:theme="@style/ToolbarIconColor"
         >
         <ImageView
             android:layout_width="30dp"

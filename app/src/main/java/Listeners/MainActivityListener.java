@@ -80,7 +80,6 @@ public class MainActivityListener implements View.OnClickListener {
             EditText passwordEditText = (EditText) currentActivity.findViewById(R.id.EditProfilePasswordEditText);
             EditText weightEditText = (EditText) currentActivity.findViewById(R.id.WeightEditText);
             EditText heightEditText = (EditText) currentActivity.findViewById(R.id.HeightEditText);
-            EditText licenseNoEditText = (EditText) currentActivity.findViewById(R.id.LicenseNumberEditText);
             MaterialSpinner selectedGender = (MaterialSpinner) currentActivity.findViewById(R.id.GenderSpinner);
             EditText securityQuestion = (EditText) currentActivity.findViewById(R.id.EditProfileSecurityQuestionEditText);
             EditText securityAnswer = (EditText) currentActivity.findViewById(R.id.EditProfileSecurityAnswerEditText);
@@ -101,10 +100,6 @@ public class MainActivityListener implements View.OnClickListener {
             if (heightEditText.getText().toString() != "") {
                 height = Double.parseDouble(heightEditText.getText().toString());
             }
-            if (licenseNoEditText.getText().toString() != "") {
-                licenseNo = licenseNoEditText.getText().toString();
-            }
-
             enteredName = TextSanitizer.sanitizeText(enteredName, true);
             enteredSurname = TextSanitizer.sanitizeText(enteredSurname, true);
             enteredEmail = TextSanitizer.sanitizeText(enteredEmail, true);
